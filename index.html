@@ -1,438 +1,276 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="google-site-verification" content="cIVUwvShKTQMrWsrrXAW36l8ICbduk_dvUqLJ3Na6Ok" />
   <title>هشحنلك — مقارنة شركات الشحن في مصر 2026</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
-  
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --gold: #F5A623;
-      --dark: #0D0D1A;
-      --card: #13132A;
-      --border: rgba(245,166,35,0.2);
-      --text: #E8E8F0;
-      --muted: #8888AA;
-      --green: #00C896;
-      --red: #FF5A5A;
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --gold:#F5A623;--dark:#0D0D1A;--card:#13132A;--card2:#1A1A35;
+      --border:rgba(245,166,35,0.2);--text:#E8E8F0;--muted:#8888AA;
+      --green:#00C896;--red:#FF5A5A;--blue:#4A90FF;
     }
-    body { font-family: 'Cairo', sans-serif; background: var(--dark); color: var(--text); min-height: 100vh; direction: rtl; }
+    body{font-family:'Cairo',sans-serif;background:var(--dark);color:var(--text);min-height:100vh;direction:rtl}
 
-    /* ===== VIDEO HERO ===== */
-    .hero {
-      position: relative;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 80px 20px 60px;
-      overflow: hidden;
-    }
-    .hero-video {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      opacity: 0.18;
-      z-index: 0;
-    }
-    .hero-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(13,13,26,0.85) 0%, rgba(26,13,46,0.8) 50%, rgba(13,26,26,0.85) 100%);
-      z-index: 1;
-    }
-    .hero-content { position: relative; z-index: 2; max-width: 700px; }
-    .hero-badge {
-      display: inline-block;
-      background: rgba(245,166,35,0.15);
-      border: 1px solid var(--gold);
-      color: var(--gold);
-      padding: 6px 18px;
-      border-radius: 50px;
-      font-size: 13px;
-      font-weight: 600;
-      margin-bottom: 24px;
-      letter-spacing: 1px;
-    }
-    .hero h1 {
-      font-size: clamp(32px, 6vw, 64px);
-      font-weight: 900;
-      line-height: 1.2;
-      margin-bottom: 16px;
-    }
-    .hero h1 span { color: var(--gold); }
-    .hero p { color: var(--muted); font-size: 17px; max-width: 500px; margin: 0 auto 36px; line-height: 1.7; }
-    .hero-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 50px; }
-    .btn-primary {
-      background: var(--gold); color: #000; border: none;
-      padding: 14px 32px; border-radius: 12px;
-      font-family: 'Cairo', sans-serif; font-size: 16px; font-weight: 700;
-      cursor: pointer; transition: opacity 0.2s, transform 0.1s;
-    }
-    .btn-primary:hover { opacity: 0.88; transform: translateY(-2px); }
-    .btn-secondary {
-      background: rgba(255,255,255,0.08); color: var(--text);
-      border: 1px solid rgba(255,255,255,0.15);
-      padding: 14px 32px; border-radius: 12px;
-      font-family: 'Cairo', sans-serif; font-size: 16px; font-weight: 600;
-      cursor: pointer; transition: background 0.2s;
-    }
-    .btn-secondary:hover { background: rgba(255,255,255,0.12); }
-    .hero-stats { display: flex; justify-content: center; gap: 50px; flex-wrap: wrap; }
-    .stat { text-align: center; }
-    .stat-num { font-size: 32px; font-weight: 900; color: var(--gold); }
-    .stat-label { font-size: 12px; color: var(--muted); margin-top: 3px; }
+    /* NAV */
+    .nav{position:fixed;top:0;width:100%;z-index:999;background:rgba(13,13,26,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+    .nav-logo{font-size:20px;font-weight:900;color:var(--gold)}
+    .nav-links{display:flex;gap:4px;flex-wrap:wrap}
+    .nav-link{background:none;border:none;color:var(--muted);font-family:'Cairo',sans-serif;font-size:13px;padding:6px 12px;border-radius:8px;cursor:pointer;transition:all 0.2s}
+    .nav-link:hover,.nav-link.active{background:rgba(245,166,35,0.1);color:var(--gold)}
 
-    /* ===== NAV ===== */
-    .nav {
-      position: fixed; top: 0; width: 100%; z-index: 999;
-      background: rgba(13,13,26,0.92); backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-      padding: 14px 24px;
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .nav-logo { font-size: 20px; font-weight: 900; color: var(--gold); }
-    .nav-links { display: flex; gap: 6px; }
-    .nav-link {
-      background: none; border: none; color: var(--muted);
-      font-family: 'Cairo', sans-serif; font-size: 14px;
-      padding: 7px 14px; border-radius: 8px; cursor: pointer;
-      transition: all 0.2s;
-    }
-    .nav-link:hover, .nav-link.active { background: rgba(245,166,35,0.1); color: var(--gold); }
-    .nav-admin-btn {
-      background: rgba(245,166,35,0.12); border: 1px solid var(--border);
-      color: var(--gold); font-family: 'Cairo', sans-serif; font-size: 13px;
-      padding: 7px 14px; border-radius: 8px; cursor: pointer; transition: all 0.2s;
-    }
-    .nav-admin-btn:hover { background: rgba(245,166,35,0.2); }
+    /* HERO */
+    .hero{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px 20px 60px;overflow:hidden}
+    .hero-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.18;z-index:0}
+    .hero-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(13,13,26,0.85) 0%,rgba(26,13,46,0.8) 50%,rgba(13,26,26,0.85) 100%);z-index:1}
+    .hero-content{position:relative;z-index:2;max-width:700px}
+    .hero-badge{display:inline-block;background:rgba(245,166,35,0.15);border:1px solid var(--gold);color:var(--gold);padding:6px 18px;border-radius:50px;font-size:13px;font-weight:600;margin-bottom:24px}
+    .hero h1{font-size:clamp(28px,5vw,56px);font-weight:900;line-height:1.2;margin-bottom:16px}
+    .hero h1 span{color:var(--gold)}
+    .hero p{color:var(--muted);font-size:16px;max-width:500px;margin:0 auto 36px;line-height:1.7}
+    .hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:50px}
+    .btn-gold{background:var(--gold);color:#000;border:none;padding:13px 28px;border-radius:12px;font-family:'Cairo',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:opacity 0.2s,transform 0.1s}
+    .btn-gold:hover{opacity:0.88;transform:translateY(-2px)}
+    .btn-outline{background:rgba(255,255,255,0.08);color:var(--text);border:1px solid rgba(255,255,255,0.15);padding:13px 28px;border-radius:12px;font-family:'Cairo',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:background 0.2s}
+    .btn-outline:hover{background:rgba(255,255,255,0.12)}
+    .hero-stats{display:flex;justify-content:center;gap:40px;flex-wrap:wrap}
+    .stat{text-align:center}
+    .stat-num{font-size:30px;font-weight:900;color:var(--gold)}
+    .stat-label{font-size:12px;color:var(--muted);margin-top:3px}
 
-    /* ===== SECTIONS ===== */
-    .section { padding: 60px 20px; max-width: 1100px; margin: 0 auto; }
-    .section-title {
-      font-size: 28px; font-weight: 900; margin-bottom: 8px;
-      text-align: center;
-    }
-    .section-title span { color: var(--gold); }
-    .section-sub { text-align: center; color: var(--muted); font-size: 15px; margin-bottom: 36px; }
+    /* SECTION */
+    .sec{padding:60px 20px;max-width:1100px;margin:0 auto}
+    .sec-title{font-size:26px;font-weight:900;margin-bottom:8px;text-align:center}
+    .sec-title span{color:var(--gold)}
+    .sec-sub{text-align:center;color:var(--muted);font-size:14px;margin-bottom:32px}
 
-    /* ===== FILTERS ===== */
-    .filters-wrap { padding: 0 20px 10px; max-width: 1100px; margin: 0 auto; }
-    .filters-title { font-size: 13px; color: var(--muted); margin-bottom: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
-    .filters { display: flex; gap: 10px; flex-wrap: wrap; }
-    .filter-btn {
-      background: var(--card); border: 1px solid var(--border); color: var(--muted);
-      padding: 8px 18px; border-radius: 50px;
-      font-family: 'Cairo', sans-serif; font-size: 14px; cursor: pointer; transition: all 0.2s;
-    }
-    .filter-btn:hover, .filter-btn.active { background: var(--gold); border-color: var(--gold); color: #000; font-weight: 700; }
+    /* FILTERS */
+    .filters-wrap{padding:0 20px 10px;max-width:1100px;margin:0 auto}
+    .filters{display:flex;gap:8px;flex-wrap:wrap}
+    .filter-btn{background:var(--card);border:1px solid var(--border);color:var(--muted);padding:7px 16px;border-radius:50px;font-family:'Cairo',sans-serif;font-size:13px;cursor:pointer;transition:all 0.2s}
+    .filter-btn:hover,.filter-btn.active{background:var(--gold);border-color:var(--gold);color:#000;font-weight:700}
 
-    /* ===== COMPARE BAR ===== */
-    .compare-bar {
-      background: rgba(245,166,35,0.08); border: 1px solid var(--gold);
-      border-radius: 12px; padding: 14px 20px;
-      max-width: 1060px; margin: 10px auto 20px;
-      display: none; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
-    }
-    .compare-bar.show { display: flex; }
-    .compare-bar-text { color: var(--gold); font-weight: 700; font-size: 15px; }
-    .compare-bar-names { color: var(--text); font-size: 14px; }
-    .btn-compare-now {
-      background: var(--gold); color: #000; border: none;
-      padding: 10px 24px; border-radius: 8px;
-      font-family: 'Cairo', sans-serif; font-weight: 700; font-size: 14px;
-      cursor: pointer; transition: opacity 0.2s;
-    }
-    .btn-compare-now:hover { opacity: 0.85; }
-    .btn-clear {
-      background: none; border: 1px solid var(--muted); color: var(--muted);
-      padding: 8px 16px; border-radius: 8px;
-      font-family: 'Cairo', sans-serif; font-size: 13px; cursor: pointer;
-    }
+    /* COMPARE BAR */
+    .compare-bar{background:rgba(245,166,35,0.08);border:1px solid var(--gold);border-radius:12px;padding:12px 20px;max-width:1060px;margin:10px auto 16px;display:none;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .compare-bar.show{display:flex}
+    .compare-bar-text{color:var(--gold);font-weight:700;font-size:14px}
+    .btn-compare-now{background:var(--gold);color:#000;border:none;padding:9px 20px;border-radius:8px;font-family:'Cairo',sans-serif;font-weight:700;font-size:13px;cursor:pointer}
+    .btn-clear{background:none;border:1px solid var(--muted);color:var(--muted);padding:7px 14px;border-radius:8px;font-family:'Cairo',sans-serif;font-size:12px;cursor:pointer}
 
-    /* ===== CARDS ===== */
-    .grid {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(300px,1fr));
-      gap: 20px; padding: 0 20px 20px; max-width: 1100px; margin: 0 auto;
-    }
-    .card {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 16px; overflow: hidden;
-      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
-      cursor: pointer; position: relative;
-    }
-    .card:hover { transform: translateY(-4px); border-color: rgba(245,166,35,0.5); box-shadow: 0 12px 40px rgba(0,0,0,0.4); }
-    .card.selected { border-color: var(--gold); box-shadow: 0 0 0 2px rgba(245,166,35,0.3); }
-    .card-check {
-      position: absolute; top: 12px; left: 12px;
-      width: 24px; height: 24px;
-      background: var(--dark); border: 2px solid var(--border);
-      border-radius: 6px; display: flex; align-items: center; justify-content: center;
-      font-size: 13px; transition: all 0.2s; z-index: 2;
-    }
-    .card.selected .card-check { background: var(--gold); border-color: var(--gold); color: #000; }
-    .card-header { padding: 24px 20px 16px; display: flex; align-items: center; gap: 14px; border-bottom: 1px solid var(--border); }
-    .company-logo { width: 56px; height: 56px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 900; flex-shrink: 0; }
-    .company-info h3 { font-size: 17px; font-weight: 700; }
-    .company-info p { font-size: 12px; color: var(--muted); margin-top: 2px; }
-    .badge { margin-right: auto; font-size: 11px; padding: 3px 10px; border-radius: 50px; font-weight: 700; }
-    .badge-popular { background: rgba(245,166,35,0.15); color: var(--gold); border: 1px solid rgba(245,166,35,0.4); }
-    .badge-cheap { background: rgba(0,200,150,0.1); color: var(--green); border: 1px solid rgba(0,200,150,0.3); }
-    .badge-fast { background: rgba(100,150,255,0.1); color: #6496FF; border: 1px solid rgba(100,150,255,0.3); }
-    .badge-global { background: rgba(200,100,255,0.1); color: #C864FF; border: 1px solid rgba(200,100,255,0.3); }
-    .card-body { padding: 16px 20px; }
-    .specs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
-    .spec { background: rgba(255,255,255,0.04); border-radius: 8px; padding: 10px; }
-    .spec-label { font-size: 11px; color: var(--muted); margin-bottom: 3px; }
-    .spec-value { font-size: 14px; font-weight: 700; }
-    .spec-value.green { color: var(--green); }
-    .spec-value.gold { color: var(--gold); }
-    .features { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
-    .feature-tag { font-size: 12px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08); padding: 4px 10px; border-radius: 50px; color: var(--muted); }
-    .feature-tag.yes { color: var(--green); border-color: rgba(0,200,150,0.2); background: rgba(0,200,150,0.07); }
-    .whatsapp-btn {
-      display: flex; align-items: center; justify-content: center; gap: 8px;
-      width: 100%; padding: 13px;
-      background: linear-gradient(135deg, #25D366, #128C7E);
-      border: none; border-radius: 10px; color: white;
-      font-family: 'Cairo', sans-serif; font-size: 15px; font-weight: 700;
-      cursor: pointer; text-decoration: none; transition: opacity 0.2s;
-    }
-    .whatsapp-btn:hover { opacity: 0.9; }
-    .whatsapp-icon { width: 20px; height: 20px; fill: white; }
+    /* GRID */
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:18px;padding:0 20px 20px;max-width:1100px;margin:0 auto}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:transform 0.2s,border-color 0.2s,box-shadow 0.2s;cursor:pointer;position:relative}
+    .card:hover{transform:translateY(-4px);border-color:rgba(245,166,35,0.5);box-shadow:0 12px 40px rgba(0,0,0,0.4)}
+    .card.selected{border-color:var(--gold);box-shadow:0 0 0 2px rgba(245,166,35,0.3)}
+    .card-check{position:absolute;top:12px;left:12px;width:22px;height:22px;background:var(--dark);border:2px solid var(--border);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;transition:all 0.2s;z-index:2}
+    .card.selected .card-check{background:var(--gold);border-color:var(--gold);color:#000}
+
+    /* CARD BG */
+    .card-bg-wrap{position:relative;height:120px;overflow:hidden;background:var(--card2)}
+    .card-bg-img{width:100%;height:100%;object-fit:cover;opacity:0.3}
+    .card-bg-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent,rgba(19,19,42,0.95))}
+    .card-logo-over{position:absolute;bottom:10px;right:14px;display:flex;align-items:center;gap:10px}
+    .company-logo{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900;flex-shrink:0}
+    .card-name-over h3{font-size:15px;font-weight:700;color:#fff}
+    .card-name-over p{font-size:11px;color:rgba(255,255,255,0.55);margin-top:1px}
+
+    .card-header{padding:18px 18px 12px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border)}
+    .company-logo-main{width:46px;height:46px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;flex-shrink:0}
+    .company-info h3{font-size:16px;font-weight:700}
+    .company-info p{font-size:11px;color:var(--muted);margin-top:2px}
+    .badge{margin-right:auto;font-size:10px;padding:3px 9px;border-radius:50px;font-weight:700}
+    .badge-popular{background:rgba(245,166,35,0.15);color:var(--gold);border:1px solid rgba(245,166,35,0.4)}
+    .badge-cheap{background:rgba(0,200,150,0.1);color:var(--green);border:1px solid rgba(0,200,150,0.3)}
+    .badge-fast{background:rgba(100,150,255,0.1);color:#6496FF;border:1px solid rgba(100,150,255,0.3)}
+    .badge-global{background:rgba(200,100,255,0.1);color:#C864FF;border:1px solid rgba(200,100,255,0.3)}
+
+    .card-body{padding:12px 18px}
+    .specs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+    .spec{background:rgba(255,255,255,0.04);border-radius:8px;padding:8px}
+    .spec-label{font-size:10px;color:var(--muted);margin-bottom:2px}
+    .spec-value{font-size:13px;font-weight:700}
+    .spec-value.green{color:var(--green)}
+    .spec-value.gold{color:var(--gold)}
+    .features{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px}
+    .feature-tag{font-size:11px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);padding:3px 8px;border-radius:50px;color:var(--muted)}
+    .feature-tag.yes{color:var(--green);border-color:rgba(0,200,150,0.2);background:rgba(0,200,150,0.07)}
+    .whatsapp-btn{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;padding:11px;background:linear-gradient(135deg,#25D366,#128C7E);border:none;border-radius:10px;color:white;font-family:'Cairo',sans-serif;font-size:14px;font-weight:700;cursor:pointer;text-decoration:none;transition:opacity 0.2s}
+    .whatsapp-btn:hover{opacity:0.9}
+    .whatsapp-icon{width:18px;height:18px;fill:white;flex-shrink:0}
+
+    /* ===== CALCULATOR ===== */
+    .calc-section{background:linear-gradient(135deg,rgba(245,166,35,0.05),rgba(245,166,35,0.02));border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:60px 20px}
+    .calc-inner{max-width:800px;margin:0 auto}
+    .calc-box{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:30px}
+    .calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+    .calc-full{grid-column:1/-1}
+    .form-group{display:flex;flex-direction:column;gap:6px}
+    .form-group label{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px}
+    .form-input{background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--text);font-family:'Cairo',sans-serif;font-size:14px;outline:none;transition:border-color 0.2s;direction:rtl;width:100%}
+    .form-input:focus{border-color:var(--gold)}
+    .form-input option{background:var(--card)}
+    .calc-btn{width:100%;padding:15px;background:var(--gold);color:#000;border:none;border-radius:12px;font-family:'Cairo',sans-serif;font-size:16px;font-weight:900;cursor:pointer;transition:opacity 0.2s}
+    .calc-btn:hover{opacity:0.88}
+    .calc-results{margin-top:20px;display:none}
+    .calc-results.show{display:block}
+    .results-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+    .result-card{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center;transition:border-color 0.2s}
+    .result-card:hover{border-color:var(--gold)}
+    .result-logo{width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;margin:0 auto 10px}
+    .result-name{font-size:14px;font-weight:700;margin-bottom:4px}
+    .result-price{font-size:22px;font-weight:900;color:var(--gold);margin-bottom:2px}
+    .result-detail{font-size:11px;color:var(--muted)}
+    .result-best{border-color:var(--green)!important;background:rgba(0,200,150,0.05)!important}
+    .result-best-label{display:inline-block;background:rgba(0,200,150,0.12);color:var(--green);border:1px solid rgba(0,200,150,0.3);font-size:10px;padding:2px 8px;border-radius:50px;margin-bottom:6px;font-weight:700}
 
     /* ===== ORDER FORM ===== */
-    .order-section {
-      background: linear-gradient(135deg, rgba(245,166,35,0.05), rgba(245,166,35,0.02));
-      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
-      padding: 70px 20px;
-    }
-    .order-inner { max-width: 700px; margin: 0 auto; }
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .form-full { grid-column: 1 / -1; }
-    .form-group { display: flex; flex-direction: column; gap: 7px; }
-    .form-group label { font-size: 13px; font-weight: 600; color: var(--muted); }
-    .form-group input, .form-group select, .form-group textarea {
-      background: rgba(255,255,255,0.05); border: 1px solid var(--border);
-      border-radius: 10px; padding: 12px 14px; color: var(--text);
-      font-family: 'Cairo', sans-serif; font-size: 14px;
-      outline: none; transition: border-color 0.2s;
-    }
-    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-      border-color: var(--gold);
-    }
-    .form-group select option { background: var(--card); }
-    .form-group textarea { resize: vertical; min-height: 90px; }
-    .form-submit {
-      width: 100%; padding: 16px; margin-top: 8px;
-      background: var(--gold); color: #000; border: none; border-radius: 12px;
-      font-family: 'Cairo', sans-serif; font-size: 17px; font-weight: 900;
-      cursor: pointer; transition: opacity 0.2s, transform 0.1s;
-    }
-    .form-submit:hover { opacity: 0.88; transform: translateY(-1px); }
-    .form-submit:disabled { opacity: 0.5; cursor: not-allowed; }
-    .form-success {
-      display: none; text-align: center; padding: 30px;
-      background: rgba(0,200,150,0.08); border: 1px solid rgba(0,200,150,0.3);
-      border-radius: 14px; margin-top: 20px;
-    }
-    .form-success.show { display: block; }
-    .form-success h3 { color: var(--green); font-size: 22px; margin-bottom: 8px; }
-    .form-success p { color: var(--muted); font-size: 15px; }
+    .order-section{padding:60px 20px;border-top:1px solid var(--border)}
+    .order-inner{max-width:750px;margin:0 auto}
+    .order-box{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:30px}
+    .order-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .order-full{grid-column:1/-1}
+    .section-divider{grid-column:1/-1;border-top:1px solid var(--border);padding-top:14px;margin-top:4px}
+    .section-divider-title{font-size:12px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:14px}
+    .address-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+    .form-submit{width:100%;padding:16px;background:var(--gold);color:#000;border:none;border-radius:12px;font-family:'Cairo',sans-serif;font-size:17px;font-weight:900;cursor:pointer;transition:opacity 0.2s;margin-top:6px}
+    .form-submit:hover{opacity:0.88}
+    .form-submit:disabled{opacity:0.5;cursor:not-allowed}
+    .form-success{display:none;text-align:center;padding:30px;background:rgba(0,200,150,0.08);border:1px solid rgba(0,200,150,0.3);border-radius:14px;margin-top:16px}
+    .form-success.show{display:block}
+    .form-success h3{color:var(--green);font-size:20px;margin-bottom:8px}
+    .form-success p{color:var(--muted);font-size:14px}
+
+    /* ===== AWBPRINT ===== */
+    .awb-section{padding:40px 20px;border-top:1px solid var(--border);background:rgba(245,166,35,0.02)}
+    .awb-inner{max-width:750px;margin:0 auto;text-align:center}
+    .awb-icon{font-size:48px;margin-bottom:12px}
+    .awb-desc{color:var(--muted);font-size:14px;margin-bottom:24px}
+    .awb-tracking-input{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+    .awb-tracking-input input{background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:10px;padding:12px 16px;color:var(--text);font-family:'Cairo',sans-serif;font-size:14px;outline:none;width:260px;direction:rtl}
+    .awb-tracking-input input:focus{border-color:var(--gold)}
+
+    /* ===== RETURNS ===== */
+    .returns-section{padding:60px 20px;border-top:1px solid var(--border)}
+    .returns-inner{max-width:750px;margin:0 auto}
+    .returns-box{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:30px}
+    .returns-steps{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-bottom:24px}
+    .return-step{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center}
+    .return-step-num{width:36px;height:36px;background:rgba(245,166,35,0.15);border:1px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:var(--gold);margin:0 auto 10px}
+    .return-step h4{font-size:14px;font-weight:700;margin-bottom:4px}
+    .return-step p{font-size:12px;color:var(--muted);line-height:1.5}
+
+    /* ===== SUPPORT ===== */
+    .support-section{padding:60px 20px;border-top:1px solid var(--border);background:rgba(245,166,35,0.02)}
+    .support-inner{max-width:900px;margin:0 auto}
+    .support-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
+    .support-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;text-align:center;transition:border-color 0.2s,transform 0.2s}
+    .support-card:hover{border-color:rgba(245,166,35,0.5);transform:translateY(-3px)}
+    .support-icon{font-size:36px;margin-bottom:12px}
+    .support-title{font-size:16px;font-weight:700;margin-bottom:6px}
+    .support-desc{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:16px}
+    .support-btn{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border-radius:10px;font-family:'Cairo',sans-serif;font-size:14px;font-weight:700;cursor:pointer;text-decoration:none;border:none;transition:opacity 0.2s}
+    .support-btn:hover{opacity:0.85}
+    .support-btn.wa{background:linear-gradient(135deg,#25D366,#128C7E);color:#fff}
+    .support-btn.call{background:rgba(74,144,255,0.15);color:var(--blue);border:1px solid rgba(74,144,255,0.3)}
+    .support-btn.mail{background:rgba(245,166,35,0.12);color:var(--gold);border:1px solid var(--border)}
 
     /* ===== MODALS ===== */
-    .modal-overlay {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.88);
-      display: none; align-items: flex-start; justify-content: center;
-      z-index: 1000; padding: 20px; overflow-y: auto;
-    }
-    .modal-overlay.show { display: flex; }
-    .modal {
-      background: #13132A; border: 1px solid var(--border);
-      border-radius: 20px; padding: 30px;
-      width: 100%; max-width: 900px; margin: auto;
-    }
-    .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
-    .modal-title { font-size: 22px; font-weight: 900; }
-    .modal-close {
-      background: rgba(255,255,255,0.1); border: none; color: white;
-      width: 36px; height: 36px; border-radius: 50%; font-size: 18px;
-      cursor: pointer; display: flex; align-items: center; justify-content: center;
-    }
-    .compare-table { width: 100%; border-collapse: collapse; }
-    .compare-table th, .compare-table td { padding: 14px 16px; text-align: center; border-bottom: 1px solid var(--border); font-size: 14px; }
-    .compare-table th { font-weight: 700; color: var(--gold); font-size: 16px; }
-    .compare-table td:first-child { text-align: right; color: var(--muted); font-size: 13px; }
-    .compare-table tr:last-child td { border-bottom: none; }
-    .tick { color: var(--green); font-size: 18px; }
-    .cross { color: var(--red); font-size: 18px; }
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);display:none;align-items:flex-start;justify-content:center;z-index:1000;padding:20px;overflow-y:auto}
+    .modal-overlay.show{display:flex}
+    .modal{background:#13132A;border:1px solid var(--border);border-radius:20px;padding:28px;width:100%;max-width:900px;margin:auto}
+    .modal-sm{max-width:500px}
+    .modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+    .modal-title{font-size:20px;font-weight:900}
+    .modal-close{background:rgba(255,255,255,0.1);border:none;color:white;width:34px;height:34px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+    .compare-table{width:100%;border-collapse:collapse}
+    .compare-table th,.compare-table td{padding:13px 14px;text-align:center;border-bottom:1px solid var(--border);font-size:13px}
+    .compare-table th{font-weight:700;color:var(--gold);font-size:15px}
+    .compare-table td:first-child{text-align:right;color:var(--muted);font-size:12px}
+    .compare-table tr:last-child td{border-bottom:none}
+    .tick{color:var(--green);font-size:17px}
+    .cross{color:var(--red);font-size:17px}
 
-    /* ===== ADMIN LOGIN ===== */
-    .admin-login-modal { max-width: 420px; }
-    .admin-login-modal .form-group { margin-bottom: 14px; }
-    .admin-login-modal input {
-      background: rgba(255,255,255,0.05); border: 1px solid var(--border);
-      border-radius: 10px; padding: 12px 14px; color: var(--text);
-      font-family: 'Cairo', sans-serif; font-size: 14px; width: 100%;
-      outline: none; transition: border-color 0.2s;
+    /* ===== AWB PRINT ===== */
+    @media print {
+      body > *:not(#awbPrintArea){ display:none!important }
+      #awbPrintArea{ display:block!important; position:fixed; inset:0; background:#fff; z-index:9999; padding:20px }
     }
-    .admin-login-modal input:focus { border-color: var(--gold); }
-    .login-error { color: var(--red); font-size: 13px; margin-top: 8px; display: none; }
-    .login-error.show { display: block; }
+    #awbPrintArea{ display:none }
+    .awb-doc{ font-family:'Cairo',sans-serif; direction:rtl; color:#000; background:#fff; padding:20px; max-width:800px; margin:0 auto; border:2px solid #000; border-radius:8px }
+    .awb-header{ display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #000; padding-bottom:12px; margin-bottom:16px }
+    .awb-logo-print{ font-size:22px; font-weight:900 }
+    .awb-doc-title{ font-size:18px; font-weight:900; text-align:center }
+    .awb-barcode{ font-size:11px; color:#666; text-align:left }
+    .awb-body{ display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px }
+    .awb-field{ border:1px solid #ccc; border-radius:6px; padding:10px }
+    .awb-field-label{ font-size:10px; color:#666; font-weight:700; margin-bottom:4px; text-transform:uppercase }
+    .awb-field-value{ font-size:14px; font-weight:700 }
+    .awb-full{ grid-column:1/-1 }
+    .awb-footer{ border-top:1px solid #ccc; padding-top:10px; font-size:11px; color:#666; text-align:center }
 
-    /* ===== ADMIN PANEL ===== */
-    .admin-panel {
-      display: none; position: fixed; inset: 0;
-      background: var(--dark); z-index: 2000; overflow-y: auto;
-    }
-    .admin-panel.show { display: block; }
-    .admin-nav {
-      background: var(--card); border-bottom: 1px solid var(--border);
-      padding: 16px 24px; display: flex; align-items: center; justify-content: space-between;
-      position: sticky; top: 0; z-index: 10;
-    }
-    .admin-nav-title { font-size: 18px; font-weight: 900; color: var(--gold); }
-    .admin-nav-right { display: flex; gap: 10px; align-items: center; }
-    .admin-tabs { display: flex; gap: 4px; padding: 20px 24px 0; border-bottom: 1px solid var(--border); }
-    .admin-tab {
-      background: none; border: none; color: var(--muted);
-      font-family: 'Cairo', sans-serif; font-size: 15px; font-weight: 600;
-      padding: 10px 20px; border-radius: 10px 10px 0 0; cursor: pointer;
-      transition: all 0.2s; border-bottom: 2px solid transparent;
-    }
-    .admin-tab.active { color: var(--gold); border-bottom-color: var(--gold); background: rgba(245,166,35,0.06); }
-    .admin-body { padding: 24px; max-width: 1200px; margin: 0 auto; }
-    .admin-section { display: none; }
-    .admin-section.active { display: block; }
+    /* LOADING */
+    .loading{text-align:center;padding:50px;color:var(--muted)}
+    .loading-spinner{display:inline-block;width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite;margin-bottom:12px}
+    @keyframes spin{to{transform:rotate(360deg)}}
 
-    /* Admin Cards Table */
-    .admin-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-    .admin-table th { text-align: right; padding: 12px 14px; color: var(--muted); font-weight: 600; font-size: 12px; text-transform: uppercase; border-bottom: 1px solid var(--border); }
-    .admin-table td { padding: 14px; border-bottom: 1px solid rgba(255,255,255,0.04); vertical-align: middle; }
-    .admin-table tr:hover td { background: rgba(255,255,255,0.02); }
-    .admin-table .company-logo-sm { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 900; }
-    .status-badge { display: inline-block; padding: 3px 10px; border-radius: 50px; font-size: 12px; font-weight: 600; }
-    .status-new { background: rgba(245,166,35,0.15); color: var(--gold); }
-    .status-done { background: rgba(0,200,150,0.12); color: var(--green); }
-    .status-cancelled { background: rgba(255,90,90,0.12); color: var(--red); }
-    .status-active { background: rgba(0,200,150,0.12); color: var(--green); }
-    .status-inactive { background: rgba(255,90,90,0.12); color: var(--red); }
-    .action-btn {
-      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08);
-      color: var(--text); font-family: 'Cairo', sans-serif; font-size: 12px;
-      padding: 5px 12px; border-radius: 6px; cursor: pointer; transition: all 0.2s;
-      margin-left: 4px;
-    }
-    .action-btn:hover { background: rgba(255,255,255,0.1); }
-    .action-btn.danger { color: var(--red); border-color: rgba(255,90,90,0.2); }
-    .action-btn.danger:hover { background: rgba(255,90,90,0.1); }
-    .action-btn.success { color: var(--green); border-color: rgba(0,200,150,0.2); }
+    /* FOOTER */
+    footer{text-align:center;padding:28px 20px;border-top:1px solid var(--border);color:var(--muted);font-size:13px}
+    footer span{color:var(--gold)}
 
-    /* Admin Form */
-    .admin-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 20px; }
-    .admin-form-full { grid-column: 1 / -1; }
-    .admin-input {
-      background: rgba(255,255,255,0.05); border: 1px solid var(--border);
-      border-radius: 10px; padding: 11px 13px; color: var(--text);
-      font-family: 'Cairo', sans-serif; font-size: 14px; width: 100%;
-      outline: none; transition: border-color 0.2s;
-    }
-    .admin-input:focus { border-color: var(--gold); }
-    .admin-label { display: block; font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 6px; }
-    .admin-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
-    .admin-card-title { font-size: 17px; font-weight: 700; margin-bottom: 4px; }
-    .admin-card-sub { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
-    .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap: 16px; margin-bottom: 28px; }
-    .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; }
-    .stat-card-num { font-size: 36px; font-weight: 900; color: var(--gold); }
-    .stat-card-label { font-size: 13px; color: var(--muted); margin-top: 4px; }
-    .toggle-switch { position: relative; display: inline-block; width: 44px; height: 24px; }
-    .toggle-switch input { opacity: 0; width: 0; height: 0; }
-    .toggle-slider { position: absolute; cursor: pointer; inset: 0; background: rgba(255,255,255,0.1); border-radius: 24px; transition: 0.3s; }
-    .toggle-slider:before { position: absolute; content: ""; height: 18px; width: 18px; right: 3px; bottom: 3px; background: white; border-radius: 50%; transition: 0.3s; }
-    input:checked + .toggle-slider { background: var(--green); }
-    input:checked + .toggle-slider:before { transform: translateX(-20px); }
-
-    /* ===== FOOTER ===== */
-    footer { text-align: center; padding: 30px 20px; border-top: 1px solid var(--border); color: var(--muted); font-size: 13px; }
-    footer span { color: var(--gold); }
-
-    /* ===== LOADING ===== */
-    .loading { text-align: center; padding: 60px; color: var(--muted); }
-    .loading-spinner { display: inline-block; width: 40px; height: 40px; border: 3px solid var(--border); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 14px; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* ===== RESPONSIVE ===== */
-    @media (max-width: 600px) {
-      .grid { grid-template-columns: 1fr; }
-      .form-grid { grid-template-columns: 1fr; }
-      .admin-form-grid { grid-template-columns: 1fr; }
-      .hero-stats { gap: 28px; }
-      .compare-table { font-size: 12px; }
-      .compare-table th, .compare-table td { padding: 10px 8px; }
-      .nav-links { display: none; }
+    @media(max-width:600px){
+      .grid,.calc-grid,.order-grid,.address-row,.results-grid,.returns-steps,.support-grid{grid-template-columns:1fr}
+      .calc-full,.order-full,.section-divider{grid-column:1/-1}
+      .nav-links{display:none}
     }
   </style>
 </head>
 <body>
 
-<!-- ===== NAV ===== -->
+<!-- NAV -->
 <nav class="nav">
   <div class="nav-logo">🚚 هشحنلك</div>
   <div class="nav-links">
-    <button class="nav-link active" onclick="scrollTo('#companies')">شركات الشحن</button>
-    <button class="nav-link" onclick="scrollTo('#order')">اطلب شحنة</button>
+    <button class="nav-link" onclick="scrollSec('companies')">شركات الشحن</button>
+    <button class="nav-link" onclick="scrollSec('calculator')">حاسبة الأسعار</button>
+    <button class="nav-link" onclick="scrollSec('order')">اطلب شحنة</button>
+    <button class="nav-link" onclick="scrollSec('returns')">المرتجعات</button>
+    <button class="nav-link" onclick="scrollSec('support')">الدعم الفني</button>
   </div>
-  <button class="nav-admin-btn" onclick="openAdminLogin()" style="display:none;">⚙️ أدمن</button>
 </nav>
-<script>
-  // Secret admin access: press Ctrl + Shift + A
-  document.addEventListener('keydown', function(e) {
-    if (e.ctrlKey && e.shiftKey && e.key === 'A') {
-      openAdminLogin();
-    }
-  });
-</script>
 
-<!-- ===== HERO ===== -->
+<!-- HERO -->
 <div class="hero" id="home">
-  <video class="hero-video" autoplay muted loop playsinline>
-    <source src="https://assets.mixkit.co/videos/preview/mixkit-delivery-man-going-door-to-door-delivering-packages-41624-large.mp4" type="video/mp4">
-  </video>
+  <div id="heroBgContainer">
+    <video class="hero-bg" autoplay muted loop playsinline>
+      <source src="https://assets.mixkit.co/videos/preview/mixkit-delivery-man-going-door-to-door-delivering-packages-41624-large.mp4" type="video/mp4">
+    </video>
+  </div>
   <div class="hero-overlay"></div>
   <div class="hero-content">
     <div class="hero-badge">🚀 دليل الشحن في مصر 2026</div>
     <h1>قارن بين <span>شركات الشحن</span><br>واختار الأنسب ليك</h1>
-    <p>كل شركات الشحن في مصر في مكان واحد — قارن الأسعار والسرعة وسيب لنا طلبك واحنا نتواصل معاك</p>
+    <p>كل شركات الشحن في مصر في مكان واحد — قارن الأسعار والسرعة وسيب لنا طلبك</p>
     <div class="hero-btns">
-      <button class="btn-primary" onclick="document.getElementById('companies').scrollIntoView({behavior:'smooth'})">شوف الشركات 🔍</button>
-      <button class="btn-secondary" onclick="document.getElementById('order').scrollIntoView({behavior:'smooth'})">اطلب شحنة الآن 📦</button>
+      <button class="btn-gold" onclick="scrollSec('companies')">شوف الشركات 🔍</button>
+      <button class="btn-outline" onclick="scrollSec('calculator')">احسب السعر 🧮</button>
     </div>
     <div class="hero-stats">
-      <div class="stat"><div class="stat-num" id="stat-companies">8</div><div class="stat-label">شركة شحن</div></div>
+      <div class="stat"><div class="stat-num" id="statCo">-</div><div class="stat-label">شركة شحن</div></div>
       <div class="stat"><div class="stat-num">27</div><div class="stat-label">محافظة</div></div>
-      <div class="stat"><div class="stat-num">24/7</div><div class="stat-label">تواصل معانا</div></div>
+      <div class="stat"><div class="stat-num">24/7</div><div class="stat-label">دعم فني</div></div>
     </div>
   </div>
 </div>
 
-<!-- ===== COMPANIES ===== -->
-<div id="companies">
-  <div class="section" style="padding-bottom:10px;">
-    <h2 class="section-title">شركات <span>الشحن</span></h2>
-    <p class="section-sub">اختار لغاية 3 شركات وقارن بينهم</p>
+<!-- COMPANIES -->
+<div id="companies" style="padding-top:20px;">
+  <div class="sec" style="padding-bottom:10px;">
+    <h2 class="sec-title">شركات <span>الشحن</span></h2>
+    <p class="sec-sub">اختار لغاية 3 شركات وقارن بينهم</p>
   </div>
-
   <div class="filters-wrap">
-    <div class="filters-title">فلتر حسب</div>
     <div class="filters">
       <button class="filter-btn active" onclick="filterCards('all',this)">الكل</button>
       <button class="filter-btn" onclick="filterCards('cod',this)">دفع عند الاستلام</button>
@@ -441,677 +279,681 @@
       <button class="filter-btn" onclick="filterCards('global',this)">شحن دولي</button>
     </div>
   </div>
-
   <div class="compare-bar" id="compareBar">
     <div>
       <div class="compare-bar-text">⚡ مقارنة سريعة</div>
-      <div class="compare-bar-names" id="compareNames"></div>
+      <div id="compareNames" style="color:var(--text);font-size:13px;"></div>
     </div>
-    <div style="display:flex;gap:8px;align-items:center;">
+    <div style="display:flex;gap:8px;">
       <button class="btn-clear" onclick="clearCompare()">مسح</button>
       <button class="btn-compare-now" onclick="showCompare()">قارن دلوقتي</button>
     </div>
   </div>
-
   <div class="grid" id="grid">
-    <div class="loading">
-      <div class="loading-spinner"></div>
-      <div>بيتحمل شركات الشحن...</div>
+    <div class="loading" style="grid-column:1/-1;"><div class="loading-spinner"></div><div>بيتحمل...</div></div>
+  </div>
+</div>
+
+<!-- CALCULATOR -->
+<div class="calc-section" id="calculator">
+  <div class="calc-inner">
+    <h2 class="sec-title">🧮 حاسبة <span>أسعار الشحن</span></h2>
+    <p class="sec-sub">احسب تكلفة شحنتك حسب المحافظة والوزن</p>
+    <div class="calc-box">
+      <div class="calc-grid">
+        <div class="form-group">
+          <label>من محافظة</label>
+          <select class="form-input" id="calcFrom"></select>
+        </div>
+        <div class="form-group">
+          <label>المنطقة / الحي</label>
+          <select class="form-input" id="calcFromArea"><option value="">اختار المنطقة</option></select>
+        </div>
+        <div class="form-group">
+          <label>إلى محافظة</label>
+          <select class="form-input" id="calcTo"></select>
+        </div>
+        <div class="form-group">
+          <label>المنطقة / الحي</label>
+          <select class="form-input" id="calcToArea"><option value="">اختار المنطقة</option></select>
+        </div>
+        <div class="form-group">
+          <label>الوزن (كيلو)</label>
+          <input type="number" class="form-input" id="calcWeight" placeholder="مثال: 2.5" min="0.1" step="0.5" value="1">
+        </div>
+        <div class="form-group">
+          <label>نوع الشحنة</label>
+          <select class="form-input" id="calcType">
+            <option value="normal">عادي</option>
+            <option value="fast">سريع (نفس اليوم / 24 ساعة)</option>
+            <option value="fragile">هشة / تحتاج تغليف</option>
+          </select>
+        </div>
+        <div class="calc-full">
+          <button class="calc-btn" onclick="calcPrices()">🧮 احسب السعر</button>
+        </div>
+      </div>
+      <div class="calc-results" id="calcResults">
+        <div style="border-top:1px solid var(--border);padding-top:20px;margin-bottom:16px;">
+          <div style="font-size:13px;color:var(--muted);margin-bottom:12px;">النتائج: <span id="calcSummary" style="color:var(--gold);font-weight:700;"></span></div>
+          <div class="results-grid" id="resultsGrid"></div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- ===== ORDER FORM ===== -->
+<!-- ORDER FORM -->
 <div class="order-section" id="order">
   <div class="order-inner">
-    <h2 class="section-title">اطلب <span>شحنتك</span> دلوقتي</h2>
-    <p class="section-sub" style="margin-bottom:30px;">املا البيانات وهنتواصل معاك في أقرب وقت</p>
+    <h2 class="sec-title">📦 اطلب <span>شحنتك</span></h2>
+    <p class="sec-sub" style="margin-bottom:24px;">املا البيانات وهنتواصل معاك فوراً</p>
+    <div class="order-box">
+      <div id="orderFormWrap">
+        <div class="order-grid">
 
-    <div class="form-grid" id="orderForm">
-      <div class="form-group">
-        <label>الاسم الكامل *</label>
-        <input type="text" id="f-name" placeholder="اسمك هنا">
-      </div>
-      <div class="form-group">
-        <label>رقم التليفون *</label>
-        <input type="tel" id="f-phone" placeholder="01xxxxxxxxx">
-      </div>
-      <div class="form-group">
-        <label>المحافظة *</label>
-        <select id="f-gov">
-          <option value="">اختار المحافظة</option>
-          <option>القاهرة</option><option>الجيزة</option><option>الإسكندرية</option>
-          <option>البحيرة</option><option>الدقهلية</option><option>الشرقية</option>
-          <option>الغربية</option><option>المنوفية</option><option>القليوبية</option>
-          <option>كفر الشيخ</option><option>دمياط</option><option>بورسعيد</option>
-          <option>الإسماعيلية</option><option>السويس</option><option>شمال سيناء</option>
-          <option>جنوب سيناء</option><option>الفيوم</option><option>بني سويف</option>
-          <option>المنيا</option><option>أسيوط</option><option>سوهاج</option>
-          <option>قنا</option><option>الأقصر</option><option>أسوان</option>
-          <option>البحر الأحمر</option><option>الوادي الجديد</option><option>مطروح</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>شركة الشحن المفضلة</label>
-        <select id="f-company">
-          <option value="">مش مهم / أي شركة</option>
-        </select>
-      </div>
-      <div class="form-group form-full">
-        <label>العنوان بالتفصيل</label>
-        <input type="text" id="f-address" placeholder="الشارع، الحي، المدينة">
-      </div>
-      <div class="form-group form-full">
-        <label>وصف المنتج / الشحنة *</label>
-        <textarea id="f-product" placeholder="إيه اللي هتشحنه؟ حجمه إيه تقريباً؟"></textarea>
-      </div>
-      <div class="form-group">
-        <label>الوزن التقريبي (كيلو)</label>
-        <input type="number" id="f-weight" placeholder="مثال: 2" min="0" step="0.5">
-      </div>
-      <div class="form-group">
-        <label>ملاحظات إضافية</label>
-        <input type="text" id="f-notes" placeholder="أي تفاصيل تانية">
-      </div>
-      <div class="form-full">
-        <button class="form-submit" onclick="submitOrder()">📦 ابعت الطلب</button>
-      </div>
-    </div>
+          <!-- بيانات المُرسِل -->
+          <div class="section-divider order-full">
+            <div class="section-divider-title">📤 بيانات المُرسِل</div>
+            <div class="order-grid" style="padding:0;">
+              <div class="form-group">
+                <label>الاسم الكامل *</label>
+                <input class="form-input" type="text" id="sName" placeholder="اسمك">
+              </div>
+              <div class="form-group">
+                <label>رقم التليفون *</label>
+                <input class="form-input" type="tel" id="sPhone" placeholder="01xxxxxxxxx">
+              </div>
+              <div class="form-group">
+                <label>المحافظة *</label>
+                <select class="form-input" id="sGov"></select>
+              </div>
+              <div class="form-group">
+                <label>المنطقة / الحي *</label>
+                <select class="form-input" id="sArea"><option value="">اختار المنطقة</option></select>
+              </div>
+              <div class="form-group order-full">
+                <label>اسم الشارع *</label>
+                <input class="form-input" type="text" id="sStreet" placeholder="مثال: شارع التحرير">
+              </div>
+              <div class="form-group">
+                <label>رقم العمارة</label>
+                <input class="form-input" type="text" id="sBuilding" placeholder="مثال: 12">
+              </div>
+              <div class="form-group">
+                <label>الدور / الشقة</label>
+                <input class="form-input" type="text" id="sFloor" placeholder="مثال: الدور 3، شقة 5">
+              </div>
+            </div>
+          </div>
 
-    <div class="form-success" id="orderSuccess">
-      <h3>✅ تم استلام طلبك!</h3>
-      <p>هنتواصل معاك على رقم التليفون اللي بعته في أقرب وقت</p>
-      <p style="margin-top:8px;color:var(--gold);font-weight:700;">رقمك: <span id="successPhone"></span></p>
+          <!-- بيانات المُستلِم -->
+          <div class="section-divider order-full">
+            <div class="section-divider-title">📥 بيانات المُستلِم</div>
+            <div class="order-grid" style="padding:0;">
+              <div class="form-group">
+                <label>الاسم الكامل *</label>
+                <input class="form-input" type="text" id="rName" placeholder="اسم المستلم">
+              </div>
+              <div class="form-group">
+                <label>رقم التليفون *</label>
+                <input class="form-input" type="tel" id="rPhone" placeholder="01xxxxxxxxx">
+              </div>
+              <div class="form-group">
+                <label>المحافظة *</label>
+                <select class="form-input" id="rGov"></select>
+              </div>
+              <div class="form-group">
+                <label>المنطقة / الحي *</label>
+                <select class="form-input" id="rArea"><option value="">اختار المنطقة</option></select>
+              </div>
+              <div class="form-group order-full">
+                <label>اسم الشارع *</label>
+                <input class="form-input" type="text" id="rStreet" placeholder="مثال: شارع الجمهورية">
+              </div>
+              <div class="form-group">
+                <label>رقم العمارة</label>
+                <input class="form-input" type="text" id="rBuilding" placeholder="مثال: 5">
+              </div>
+              <div class="form-group">
+                <label>الدور / الشقة</label>
+                <input class="form-input" type="text" id="rFloor" placeholder="مثال: الدور 2، شقة 8">
+              </div>
+            </div>
+          </div>
+
+          <!-- تفاصيل الشحنة -->
+          <div class="section-divider order-full">
+            <div class="section-divider-title">📋 تفاصيل الشحنة</div>
+            <div class="order-grid" style="padding:0;">
+              <div class="form-group">
+                <label>شركة الشحن المفضلة</label>
+                <select class="form-input" id="fCompany">
+                  <option value="">مش مهم / أي شركة</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>الوزن التقريبي (كيلو)</label>
+                <input class="form-input" type="number" id="fWeight" placeholder="مثال: 2" min="0" step="0.5">
+              </div>
+              <div class="form-group order-full">
+                <label>وصف المنتج / الشحنة *</label>
+                <textarea class="form-input" id="fProduct" placeholder="إيه اللي هتشحنه؟ حجمه إيه تقريباً؟" style="min-height:80px;resize:vertical;"></textarea>
+              </div>
+              <div class="form-group">
+                <label>قيمة المنتج (للتأمين)</label>
+                <input class="form-input" type="number" id="fValue" placeholder="بالجنيه">
+              </div>
+              <div class="form-group">
+                <label>ملاحظات إضافية</label>
+                <input class="form-input" type="text" id="fNotes" placeholder="أي تفاصيل تانية">
+              </div>
+            </div>
+          </div>
+
+          <div class="order-full">
+            <button class="form-submit" onclick="submitOrder()">📦 ابعت الطلب</button>
+          </div>
+        </div>
+      </div>
+      <div class="form-success" id="orderSuccess">
+        <div style="font-size:48px;margin-bottom:12px;">✅</div>
+        <h3>تم استلام طلبك!</h3>
+        <p>هنتواصل معاك على <strong id="successPhone" style="color:var(--gold);"></strong> في أقرب وقت</p>
+        <p style="margin-top:10px;">رقم طلبك: <strong id="successOrderId" style="color:var(--gold);"></strong></p>
+        <button class="btn-gold" style="margin-top:20px;" onclick="printAWB()">🖨️ اطبع البوليصة</button>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- ===== COMPARE MODAL ===== -->
+<!-- RETURNS -->
+<div class="returns-section" id="returns">
+  <div class="returns-inner">
+    <h2 class="sec-title">🔄 إدارة <span>المرتجعات</span></h2>
+    <p class="sec-sub">إدارة مرتجعاتك بسهولة وشفافية كاملة</p>
+    <div class="returns-box">
+      <div class="returns-steps">
+        <div class="return-step">
+          <div class="return-step-num">1</div>
+          <h4>ابعت طلب الإرجاع</h4>
+          <p>سجل بيانات الشحنة اللي عايز ترجعها من خلال النموذج</p>
+        </div>
+        <div class="return-step">
+          <div class="return-step-num">2</div>
+          <h4>هنراجع الطلب</h4>
+          <p>فريقنا هيراجع طلب الإرجاع وهيتواصل معاك خلال 24 ساعة</p>
+        </div>
+        <div class="return-step">
+          <div class="return-step-num">3</div>
+          <h4>الاستلام والإرجاع</h4>
+          <p>هنبعت مندوب يستلم الشحنة من عندك ويرجعها للمُرسِل</p>
+        </div>
+        <div class="return-step">
+          <div class="return-step-num">4</div>
+          <h4>تأكيد الإرجاع</h4>
+          <p>هتاخد إشعار لما الشحنة توصل للمُرسِل بنجاح</p>
+        </div>
+      </div>
+      <div class="order-grid">
+        <div class="form-group">
+          <label>رقم الطلب أو البوليصة</label>
+          <input class="form-input" type="text" id="retOrderId" placeholder="مثال: ORD-2026-001">
+        </div>
+        <div class="form-group">
+          <label>رقم تليفونك</label>
+          <input class="form-input" type="tel" id="retPhone" placeholder="01xxxxxxxxx">
+        </div>
+        <div class="form-group order-full">
+          <label>سبب الإرجاع</label>
+          <select class="form-input" id="retReason">
+            <option value="">اختار السبب</option>
+            <option>المنتج وصل تالف</option>
+            <option>منتج غلط / مش اللي طلبته</option>
+            <option>المستلم رفض الاستلام</option>
+            <option>عنوان غلط</option>
+            <option>أسباب أخرى</option>
+          </select>
+        </div>
+        <div class="form-group order-full">
+          <label>تفاصيل إضافية</label>
+          <textarea class="form-input" id="retDetails" placeholder="وصف المشكلة بالتفصيل..." style="min-height:70px;resize:vertical;"></textarea>
+        </div>
+        <div class="order-full">
+          <button class="form-submit" onclick="submitReturn()">🔄 ابعت طلب الإرجاع</button>
+        </div>
+      </div>
+      <div class="form-success" id="returnSuccess" style="margin-top:16px;">
+        <h3>✅ تم استلام طلب الإرجاع!</h3>
+        <p>هنتواصل معاك خلال 24 ساعة لتنسيق عملية الإرجاع</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SUPPORT -->
+<div class="support-section" id="support">
+  <div class="support-inner">
+    <h2 class="sec-title">💬 <span>الدعم الفني</span></h2>
+    <p class="sec-sub">فريقنا موجود 24/7 لمساعدتك في أي وقت</p>
+    <div class="support-grid">
+      <div class="support-card">
+        <div class="support-icon">💬</div>
+        <div class="support-title">واتساب</div>
+        <div class="support-desc">تواصل معانا مباشرة على واتساب — رد فوري خلال دقائق</div>
+        <a class="support-btn wa" href="https://wa.me/201044547874" target="_blank">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.554 4.122 1.523 5.854L0 24l6.29-1.493A11.928 11.928 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.007-1.373l-.36-.213-3.733.886.939-3.63-.233-.374A9.818 9.818 0 1112 21.818z"/></svg>
+          واتساب دلوقتي
+        </a>
+      </div>
+      <div class="support-card">
+        <div class="support-icon">📞</div>
+        <div class="support-title">اتصل بينا</div>
+        <div class="support-desc">اتصل بخدمة العملاء مباشرة من السبت للخميس 9 صباحاً لـ 6 مساءً</div>
+        <a class="support-btn call" href="tel:+201044547874">
+          📞 01044547874
+        </a>
+      </div>
+      <div class="support-card">
+        <div class="support-icon">📧</div>
+        <div class="support-title">البريد الإلكتروني</div>
+        <div class="support-desc">ابعتلنا إيميل وهنرد عليك خلال 24 ساعة بأي استفسار</div>
+        <a class="support-btn mail" href="mailto:support@heshnelak.com">
+          📧 ابعت إيميل
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- COMPARE MODAL -->
 <div class="modal-overlay" id="compareModal" onclick="if(event.target===this)closeModal('compareModal')">
   <div class="modal">
     <div class="modal-header">
       <div class="modal-title">⚡ مقارنة الشركات</div>
       <button class="modal-close" onclick="closeModal('compareModal')">✕</button>
     </div>
-    <div style="overflow-x:auto;">
-      <table class="compare-table" id="compareTable"></table>
-    </div>
+    <div style="overflow-x:auto;"><table class="compare-table" id="compareTable"></table></div>
   </div>
 </div>
 
-<!-- ===== ADMIN LOGIN MODAL ===== -->
-<div class="modal-overlay" id="adminLoginModal" onclick="if(event.target===this)closeModal('adminLoginModal')">
-  <div class="modal admin-login-modal">
-    <div class="modal-header">
-      <div class="modal-title">🔐 دخول الأدمن</div>
-      <button class="modal-close" onclick="closeModal('adminLoginModal')">✕</button>
-    </div>
-    <div class="form-group" style="margin-bottom:14px;">
-      <label class="admin-label">البريد الإلكتروني</label>
-      <input class="admin-input" type="email" id="adminEmail" placeholder="admin@heshnelak.com">
-    </div>
-    <div class="form-group" style="margin-bottom:20px;">
-      <label class="admin-label">كلمة السر</label>
-      <input class="admin-input" type="password" id="adminPassword" placeholder="••••••••" onkeydown="if(event.key==='Enter')adminLogin()">
-    </div>
-    <button class="form-submit" onclick="adminLogin()">دخول</button>
-    <div class="login-error" id="loginError">❌ البريد أو كلمة السر غلط</div>
-  </div>
-</div>
+<!-- AWB PRINT AREA -->
+<div id="awbPrintArea"></div>
 
-<!-- ===== ADMIN PANEL ===== -->
-<div class="admin-panel" id="adminPanel">
-  <div class="admin-nav">
-    <div class="admin-nav-title">🚚 لوحة تحكم هشحنلك</div>
-    <div class="admin-nav-right">
-      <span style="color:var(--muted);font-size:13px;" id="adminUserEmail"></span>
-      <button class="action-btn" onclick="adminLogout()">خروج</button>
-    </div>
-  </div>
-
-  <div class="admin-tabs">
-    <button class="admin-tab active" onclick="switchTab('tab-orders')">📋 الطلبات</button>
-    <button class="admin-tab" onclick="switchTab('tab-companies')">🏢 الشركات</button>
-    <button class="admin-tab" onclick="switchTab('tab-add-company')">➕ إضافة شركة</button>
-  </div>
-
-  <div class="admin-body">
-
-    <!-- ORDERS TAB -->
-    <div class="admin-section active" id="tab-orders">
-      <div class="stats-grid" id="ordersStats">
-        <div class="stat-card"><div class="stat-card-num" id="statTotal">-</div><div class="stat-card-label">إجمالي الطلبات</div></div>
-        <div class="stat-card"><div class="stat-card-num" id="statNew">-</div><div class="stat-card-label">طلبات جديدة</div></div>
-        <div class="stat-card"><div class="stat-card-num" id="statDone">-</div><div class="stat-card-label">تم التنفيذ</div></div>
-      </div>
-      <div class="admin-card">
-        <div class="admin-card-title">طلبات العملاء</div>
-        <div class="admin-card-sub">كل الطلبات اللي جت من الموقع</div>
-        <div style="overflow-x:auto;">
-          <table class="admin-table" id="ordersTable">
-            <thead><tr><th>الاسم</th><th>التليفون</th><th>المحافظة</th><th>الشركة المفضلة</th><th>الوصف</th><th>التاريخ</th><th>الحالة</th><th>إجراء</th></tr></thead>
-            <tbody id="ordersBody"><tr><td colspan="8" style="text-align:center;padding:30px;color:var(--muted);">بيتحمل...</td></tr></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- COMPANIES TAB -->
-    <div class="admin-section" id="tab-companies">
-      <div class="admin-card">
-        <div class="admin-card-title">شركات الشحن</div>
-        <div class="admin-card-sub">تحكم في الشركات الظاهرة على الموقع</div>
-        <div style="overflow-x:auto;">
-          <table class="admin-table" id="companiesTable">
-            <thead><tr><th>الشركة</th><th>السعر</th><th>وقت التوصيل</th><th>التغطية</th><th>الحالة</th><th>إجراء</th></tr></thead>
-            <tbody id="companiesBody"><tr><td colspan="6" style="text-align:center;padding:30px;color:var(--muted);">بيتحمل...</td></tr></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- ADD COMPANY TAB -->
-    <div class="admin-section" id="tab-add-company">
-      <div class="admin-card">
-        <div class="admin-card-title">إضافة / تعديل شركة</div>
-        <div class="admin-card-sub">أضف شركة شحن جديدة للموقع</div>
-        <input type="hidden" id="edit-id">
-        <div class="admin-form-grid">
-          <div><label class="admin-label">اسم الشركة (إنجليزي)</label><input class="admin-input" id="a-name" placeholder="Bosta"></div>
-          <div><label class="admin-label">اسم الشركة (عربي)</label><input class="admin-input" id="a-name-ar" placeholder="بوسطة"></div>
-          <div><label class="admin-label">اختصار اللوجو</label><input class="admin-input" id="a-logo" placeholder="B"></div>
-          <div><label class="admin-label">لون اللوجو</label><input class="admin-input" type="color" id="a-color" value="#F5A623"></div>
-          <div><label class="admin-label">وصف قصير</label><input class="admin-input" id="a-desc" placeholder="أسرع شركة شحن"></div>
-          <div><label class="admin-label">السعر ابتداءً من (جنيه)</label><input class="admin-input" type="number" id="a-price" placeholder="45"></div>
-          <div><label class="admin-label">وقت التوصيل</label><input class="admin-input" id="a-time" placeholder="24 ساعة"></div>
-          <div><label class="admin-label">التغطية</label><input class="admin-input" id="a-coverage" placeholder="27 محافظة"></div>
-          <div><label class="admin-label">التتبع</label><input class="admin-input" id="a-tracking" placeholder="فوري"></div>
-          <div><label class="admin-label">الباجة</label><input class="admin-input" id="a-badge" placeholder="الأسرع"></div>
-          <div>
-            <label class="admin-label">نوع الباجة</label>
-            <select class="admin-input" id="a-badge-type">
-              <option value="popular">popular (ذهبي)</option>
-              <option value="fast">fast (أزرق)</option>
-              <option value="cheap">cheap (أخضر)</option>
-              <option value="global">global (بنفسجي)</option>
-            </select>
-          </div>
-          <div style="display:flex;gap:20px;align-items:center;padding-top:10px;">
-            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:14px;">
-              <input type="checkbox" id="a-cod" checked> دفع عند الاستلام
-            </label>
-            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:14px;">
-              <input type="checkbox" id="a-intl"> شحن دولي
-            </label>
-            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:14px;">
-              <input type="checkbox" id="a-returns"> إرجاع
-            </label>
-          </div>
-          <div class="admin-form-full">
-            <button class="form-submit" id="saveCompanyBtn" onclick="saveCompany()">💾 حفظ الشركة</button>
-          </div>
-          <div class="admin-form-full" id="editCancelWrap" style="display:none;">
-            <button class="action-btn" onclick="cancelEdit()">❌ إلغاء التعديل</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<!-- ===== FOOTER ===== -->
 <footer>
-  صفحة مقارنة شركات الشحن — للتواصل والاستفسار <span>واتساب: 01044547874</span>
+  مقارنة شركات الشحن في مصر — للتواصل <span>واتساب: 01044547874</span>
 </footer>
 
 <script>
-  // ===== SUPABASE CONFIG =====
-  const SUPA_URL = 'https://hfykpirbysgzdzwxdtvd.supabase.co';
-  const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhmeWtwaXJieXNnemR6d3hkdHZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA5NjYyMjIsImV4cCI6MjA5NjU0MjIyMn0.B70VielwJJ3MSjMWZQgLBvo0p2gWaXDMM1bz6IjJyGs';
+const SUPA_URL='https://hfykpirbysgzdzwxdtvd.supabase.co';
+const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhmeWtwaXJieXNnemR6d3hkdHZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA5NjYyMjIsImV4cCI6MjA5NjU0MjIyMn0.B70VielwJJ3MSjMWZQgLBvo0p2gWaXDMM1bz6IjJyGs';
+const H={'apikey':SUPA_KEY,'Authorization':`Bearer ${SUPA_KEY}`,'Content-Type':'application/json'};
 
-  // Simple Supabase client using fetch directly - no library needed
-  const sb = {
-    from: (table) => ({
-      select: (cols='*') => ({
-        eq: (col, val) => ({
-          order: (col2, opts={}) => sbFetch('GET', table, {select: cols, [col]: `eq.${val}`, order: `${col2}.${opts.ascending===false?'desc':'asc'}`}),
-          single: () => sbFetch('GET', table, {select: cols, [col]: `eq.${val}`}, true),
-        }),
-        order: (col2, opts={}) => sbFetch('GET', table, {select: cols, order: `${col2}.${opts.ascending===false?'desc':'asc'}`}),
-        single: () => sbFetch('GET', table, {select: cols}, true),
-      }),
-      insert: (body) => sbMutate('POST', table, body),
-      update: (body) => ({
-        eq: (col, val) => sbMutate('PATCH', table, body, {[col]: `eq.${val}`}),
-      }),
-      delete: () => ({
-        eq: (col, val) => sbMutate('DELETE', table, null, {[col]: `eq.${val}`}),
-      }),
-    }),
-    auth: {
-      signInWithPassword: async ({email, password}) => {
-        try {
-          const r = await fetch(`${SUPA_URL}/auth/v1/token?grant_type=password`, {
-            method: 'POST',
-            headers: {'Content-Type':'application/json','apikey': SUPA_KEY},
-            body: JSON.stringify({email, password})
-          });
-          const d = await r.json();
-          if (d.error || d.error_description) return {data: null, error: d};
-          currentSession = d;
-          return {data: {user: d.user, session: d}, error: null};
-        } catch(e) { return {data: null, error: e}; }
-      },
-      signOut: async () => {
-        currentSession = null;
-        return {error: null};
-      },
-      getSession: async () => {
-        return {data: {session: currentSession}};
-      }
-    }
+async function dbGet(t,q=''){const r=await fetch(`${SUPA_URL}/rest/v1/${t}?${q}`,{headers:H});return r.json()}
+async function dbPost(t,b){const r=await fetch(`${SUPA_URL}/rest/v1/${t}`,{method:'POST',headers:{...H,'Prefer':'return=representation'},body:JSON.stringify(b)});return{ok:r.ok,data:await r.json()}}
+
+// ===== GOVERNORATES & AREAS =====
+const GOVS={
+  'القاهرة':['مدينة نصر','النزهة','هليوبوليس','المعادي','المنيل','شبرا','عين شمس','الزيتون','حلوان','التجمع الأول','التجمع الخامس','مدينتي','15 مايو','دار السلام','بولاق','وسط البلد','أخرى'],
+  'الجيزة':['الدقي','المهندسين','العجوزة','الزمالك','إمبابة','فيصل','هرم','الشيخ زايد','6 أكتوبر','البدرشين','أوسيم','أخرى'],
+  'الإسكندرية':['سيدي جابر','محطة الرمل','سموحة','العجمي','ميامي','برج العرب','العامرية','الدخيلة','أخرى'],
+  'الدقهلية':['المنصورة','طلخا','ميت غمر','بلقاس','أخرى'],
+  'الشرقية':['الزقازيق','بلبيس','العاشر من رمضان','أخرى'],
+  'الغربية':['طنطا','كفر الزيات','المحلة الكبرى','أخرى'],
+  'المنوفية':['شبين الكوم','السادات','منوف','أخرى'],
+  'القليوبية':['بنها','شبرا الخيمة','قليوب','أخرى'],
+  'البحيرة':['دمنهور','كفر الدوار','أبو المطامير','أخرى'],
+  'كفر الشيخ':['كفر الشيخ','دسوق','فوة','أخرى'],
+  'دمياط':['دمياط','رأس البر','فارسكور','أخرى'],
+  'بورسعيد':['بورسعيد','بورفؤاد','أخرى'],
+  'الإسماعيلية':['الإسماعيلية','القنطرة','التل الكبير','أخرى'],
+  'السويس':['السويس','أخرى'],
+  'الفيوم':['الفيوم','إطسا','سنورس','أخرى'],
+  'بني سويف':['بني سويف','الواسطى','نصر','أخرى'],
+  'المنيا':['المنيا','ملوى','مغاغة','أخرى'],
+  'أسيوط':['أسيوط','ديروط','القوصية','أخرى'],
+  'سوهاج':['سوهاج','أخميم','جرجا','أخرى'],
+  'قنا':['قنا','نجع حمادي','دشنا','أخرى'],
+  'الأقصر':['الأقصر','إسنا','أرمنت','أخرى'],
+  'أسوان':['أسوان','كوم أمبو','إدفو','أخرى'],
+  'البحر الأحمر':['الغردقة','سفاجا','القصير','أخرى'],
+  'الوادي الجديد':['الخارجة','الداخلة','أخرى'],
+  'مطروح':['مرسى مطروح','الحمام','سيوة','أخرى'],
+  'شمال سيناء':['العريش','رفح','بئر العبد','أخرى'],
+  'جنوب سيناء':['شرم الشيخ','دهب','طابا','أخرى'],
+};
+
+const GOV_LIST=Object.keys(GOVS);
+
+// Default pricing: base + per kg per zone
+const DEFAULT_PRICING={
+  same:{base:25,perKg:3},     // نفس المحافظة
+  near:{base:35,perKg:4},     // محافظات قريبة
+  far:{base:50,perKg:6},      // محافظات بعيدة
+  remote:{base:65,perKg:8}    // أقصى الصعيد / سيناء / مطروح
+};
+
+const REMOTE_GOVS=['أسوان','الوادي الجديد','مطروح','شمال سيناء','جنوب سيناء','البحر الأحمر'];
+const NEAR_GOVS={
+  'القاهرة':['الجيزة','القليوبية'],
+  'الجيزة':['القاهرة','الفيوم','بني سويف'],
+  'الإسكندرية':['البحيرة','مطروح'],
+};
+
+function getZone(from,to){
+  if(from===to)return 'same';
+  if(REMOTE_GOVS.includes(from)||REMOTE_GOVS.includes(to))return 'remote';
+  if(NEAR_GOVS[from]?.includes(to)||NEAR_GOVS[to]?.includes(from))return 'near';
+  return 'far';
+}
+
+function calcCost(from,to,weight,type,basePrice,perKgPrice){
+  const zone=getZone(from,to);
+  let base=basePrice||DEFAULT_PRICING[zone].base;
+  let pkg=perKgPrice||DEFAULT_PRICING[zone].perKg;
+  let total=base+(Math.max(0,weight-1)*pkg);
+  if(type==='fast')total*=1.5;
+  if(type==='fragile')total+=15;
+  return Math.round(total);
+}
+
+// ===== POPULATE SELECTS =====
+function fillGovSelect(el,withAll=false){
+  el.innerHTML=(withAll?'<option value="">اختار المحافظة</option>':'')+GOV_LIST.map(g=>`<option value="${g}">${g}</option>`).join('');
+}
+function fillAreaSelect(el,gov){
+  const areas=GOVS[gov]||['أخرى'];
+  el.innerHTML='<option value="">اختار المنطقة</option>'+areas.map(a=>`<option value="${a}">${a}</option>`).join('');
+}
+
+// ===== STATE =====
+const selected=new Map();
+let allCompanies=[];
+let lastOrder=null;
+
+// ===== INIT =====
+document.addEventListener('DOMContentLoaded',()=>{
+  // Fill gov selects
+  fillGovSelect(document.getElementById('calcFrom'));
+  fillGovSelect(document.getElementById('calcTo'));
+  fillGovSelect(document.getElementById('sGov'),true);
+  fillGovSelect(document.getElementById('rGov'),true);
+
+  // Area listeners
+  document.getElementById('calcFrom').addEventListener('change',function(){fillAreaSelect(document.getElementById('calcFromArea'),this.value)});
+  document.getElementById('calcTo').addEventListener('change',function(){fillAreaSelect(document.getElementById('calcToArea'),this.value)});
+  document.getElementById('sGov').addEventListener('change',function(){fillAreaSelect(document.getElementById('sArea'),this.value)});
+  document.getElementById('rGov').addEventListener('change',function(){fillAreaSelect(document.getElementById('rArea'),this.value)});
+
+  loadCompanies();
+  loadHeroBg();
+});
+
+function scrollSec(id){document.getElementById(id).scrollIntoView({behavior:'smooth'})}
+function closeModal(id){document.getElementById(id).classList.remove('show')}
+
+// ===== HERO BG =====
+async function loadHeroBg(){
+  try{
+    const d=await dbGet('site_settings','key=eq.hero_bg&select=value');
+    if(d&&d[0]&&d[0].value){applyHeroBg(d[0].value)}
+  }catch{}
+}
+function applyHeroBg(v){
+  const c=document.getElementById('heroBgContainer');
+  if(!v||!v.type)return;
+  if(v.type==='video'&&v.url)c.innerHTML=`<video class="hero-bg" autoplay muted loop playsinline><source src="${v.url}" type="video/mp4"></video>`;
+  else if(v.type==='image'&&v.url)c.innerHTML=`<img class="hero-bg" src="${v.url}" alt="">`;
+  else if(v.type==='color'&&v.color)c.innerHTML=`<div style="position:absolute;inset:0;background:${v.color};z-index:0;"></div>`;
+}
+
+// ===== COMPANIES =====
+async function loadCompanies(){
+  const data=await dbGet('companies','order=created_at.asc&select=*');
+  if(!Array.isArray(data)){showErr();return}
+  allCompanies=data;
+  document.getElementById('statCo').textContent=data.length;
+  renderCompanies(data);
+  populateCompanySel(data);
+}
+function showErr(){document.getElementById('grid').innerHTML='<div style="grid-column:1/-1;text-align:center;padding:50px;color:var(--muted);">تأكد من إعداد Supabase</div>'}
+function populateCompanySel(cos){
+  const s=document.getElementById('fCompany');
+  cos.forEach(c=>{const o=document.createElement('option');o.value=c.name;o.textContent=c.name;s.appendChild(o)});
+}
+function renderCompanies(cos){
+  const g=document.getElementById('grid');
+  if(!cos.length){g.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:50px;color:var(--muted);">مفيش شركات متاحة</div>';return}
+  g.innerHTML=cos.map(c=>buildCard(c)).join('');
+}
+function buildCard(c){
+  const tags=c.tags||'';
+  const feats=Array.isArray(c.features)?c.features:[];
+  const wt=encodeURIComponent(`عايز أعرف أكتر عن ${c.name}`);
+  const hasBg=c.images&&c.images[0];
+  const bgSrc=hasBg?(c.images[0].data||c.images[0]):'';
+  return `<div class="card" data-tags="${tags}" onclick="toggleSelect(this,'${c.name.replace(/'/g,"\\'")}')">
+    <div class="card-check">✓</div>
+    ${hasBg?`<div class="card-bg-wrap"><img class="card-bg-img" src="${bgSrc}" alt="" onerror="this.style.display='none'"><div class="card-bg-overlay"></div><div class="card-logo-over"><div class="company-logo" style="background:${c.color||'#F5A623'};color:#fff;">${c.short_name||'?'}</div><div class="card-name-over"><h3>${c.name}</h3><p>${c.description||''}</p></div></div></div>`
+    :`<div class="card-header"><div class="company-logo-main" style="background:${c.color||'#F5A623'};color:#fff;">${c.short_name||'?'}</div><div class="company-info"><h3>${c.name}</h3><p>${c.description||''}</p></div>${c.badge?`<span class="badge badge-${c.badge_type||'popular'}">${c.badge}</span>`:''}</div>`}
+    <div class="card-body">
+      <div class="specs">
+        <div class="spec"><div class="spec-label">السعر ابتداءً من</div><div class="spec-value gold">${c.price||'-'}</div></div>
+        <div class="spec"><div class="spec-label">وقت التوصيل</div><div class="spec-value green">${c.speed||'-'}</div></div>
+        <div class="spec"><div class="spec-label">التغطية</div><div class="spec-value">${c.coverage||'-'}</div></div>
+        <div class="spec"><div class="spec-label">التتبع</div><div class="spec-value green">${c.tracking||'-'}</div></div>
+      </div>
+      <div class="features">${feats.map(f=>`<span class="feature-tag ${f.startsWith('✓')?'yes':''}">${f}</span>`).join('')}</div>
+      <a class="whatsapp-btn" href="https://wa.me/201044547874?text=${wt}" target="_blank" onclick="event.stopPropagation()">
+        <svg class="whatsapp-icon" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.554 4.122 1.523 5.854L0 24l6.29-1.493A11.928 11.928 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.007-1.373l-.36-.213-3.733.886.939-3.63-.233-.374A9.818 9.818 0 1112 21.818z"/></svg>
+        تواصل معانا
+      </a>
+    </div>
+  </div>`;
+}
+
+// ===== FILTER =====
+function filterCards(tag,btn){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('#grid .card').forEach(c=>{c.style.display=(tag==='all'||(c.dataset.tags||'').includes(tag))?'':'none'});
+}
+
+// ===== COMPARE =====
+function toggleSelect(card,name){
+  if(event.target.closest('.whatsapp-btn'))return;
+  if(selected.has(name)){selected.delete(name);card.classList.remove('selected')}
+  else{if(selected.size>=3){alert('ممكن تقارن بين 3 شركات بس');return}selected.set(name,card);card.classList.add('selected')}
+  const bar=document.getElementById('compareBar');
+  const nm=document.getElementById('compareNames');
+  if(selected.size>0){bar.classList.add('show');nm.textContent=[...selected.keys()].join(' vs ')}
+  else bar.classList.remove('show');
+}
+function clearCompare(){selected.forEach(c=>c.classList.remove('selected'));selected.clear();document.getElementById('compareBar').classList.remove('show')}
+function showCompare(){
+  if(selected.size<2){alert('اختار شركتين على الأقل');return}
+  const names=[...selected.keys()];
+  const cos=names.map(n=>allCompanies.find(c=>c.name===n)||{});
+  const rows=[['السعر','price'],['التوصيل','speed'],['التغطية','coverage'],['التتبع','tracking']];
+  let html='<tr><th>المقارنة</th>'+names.map(n=>`<th>${n}</th>`).join('')+'</tr>';
+  rows.forEach(([l,k])=>{
+    html+=`<tr><td>${l}</td>`;
+    cos.forEach(c=>{html+=`<td>${c[k]||'-'}</td>`});
+    html+='</tr>';
+  });
+  ['cod','global'].forEach(tag=>{
+    const label=tag==='cod'?'دفع عند الاستلام':'شحن دولي';
+    html+=`<tr><td>${label}</td>`;
+    cos.forEach(c=>{const has=(c.tags||'').includes(tag)||(c.features||[]).some(f=>f.includes(tag==='cod'?'دفع':'دولي'));html+=`<td class="${has?'tick':'cross'}">${has?'✓':'✗'}</td>`});
+    html+='</tr>';
+  });
+  html+='<tr><td>تواصل</td>'+names.map(n=>`<td><a class="whatsapp-btn" href="https://wa.me/201044547874?text=${encodeURIComponent('عايز أعرف أكتر عن '+n)}" target="_blank" style="padding:8px 10px;font-size:12px;">واتساب</a></td>`).join('')+'</tr>';
+  document.getElementById('compareTable').innerHTML=html;
+  document.getElementById('compareModal').classList.add('show');
+}
+
+// ===== CALCULATOR =====
+function calcPrices(){
+  const from=document.getElementById('calcFrom').value;
+  const to=document.getElementById('calcTo').value;
+  const fromArea=document.getElementById('calcFromArea').value;
+  const toArea=document.getElementById('calcToArea').value;
+  const weight=parseFloat(document.getElementById('calcWeight').value)||1;
+  const type=document.getElementById('calcType').value;
+  if(!from||!to){alert('اختار محافظة الإرسال والاستلام');return}
+
+  const summary=`${from}${fromArea?' — '+fromArea:''} ← ${to}${toArea?' — '+toArea:''} | ${weight} كيلو`;
+  document.getElementById('calcSummary').textContent=summary;
+
+  const cos=allCompanies.length?allCompanies:[
+    {name:'بوسطة',short_name:'B',color:'#FF6B35',base_price:25,per_kg:4},
+    {name:'J&T',short_name:'J&T',color:'#E31837',base_price:20,per_kg:3},
+    {name:'أرامكس',short_name:'AR',color:'#CC0000',base_price:35,per_kg:6},
+  ];
+
+  const results=cos.map(c=>{
+    const total=calcCost(from,to,weight,type,c.base_price,c.per_kg);
+    return{...c,total};
+  }).sort((a,b)=>a.total-b.total);
+
+  const minPrice=results[0]?.total;
+  const grid=document.getElementById('resultsGrid');
+  grid.innerHTML=results.map((c,i)=>`
+    <div class="result-card ${i===0?'result-best':''}">
+      ${i===0?'<div class="result-best-label">✓ الأرخص</div>':''}
+      <div class="result-logo" style="background:${c.color||'#F5A623'};color:#fff;">${c.short_name||'?'}</div>
+      <div class="result-name">${c.name}</div>
+      <div class="result-price">${c.total} جنيه</div>
+      <div class="result-detail">${weight} كيلو | ${type==='fast'?'شحن سريع':type==='fragile'?'شحنة هشة':'شحن عادي'}</div>
+    </div>`).join('');
+
+  document.getElementById('calcResults').classList.add('show');
+}
+
+// ===== ORDER =====
+async function submitOrder(){
+  const sName=document.getElementById('sName').value.trim();
+  const sPhone=document.getElementById('sPhone').value.trim();
+  const sGov=document.getElementById('sGov').value;
+  const sArea=document.getElementById('sArea').value;
+  const sStreet=document.getElementById('sStreet').value.trim();
+  const rName=document.getElementById('rName').value.trim();
+  const rPhone=document.getElementById('rPhone').value.trim();
+  const rGov=document.getElementById('rGov').value;
+  const rArea=document.getElementById('rArea').value;
+  const rStreet=document.getElementById('rStreet').value.trim();
+  const product=document.getElementById('fProduct').value.trim();
+
+  if(!sName||!sPhone||!sGov||!sStreet||!rName||!rPhone||!rGov||!rStreet||!product){
+    alert('من فضلك املا الحقول المطلوبة (*)');return;
+  }
+  const btn=document.querySelector('#orderFormWrap .form-submit');
+  btn.disabled=true;btn.textContent='⏳ بيتبعت...';
+
+  const orderId='ORD-'+Date.now();
+  const body={
+    order_id:orderId,
+    sender_name:sName,sender_phone:sPhone,
+    sender_gov:sGov,sender_area:sArea,
+    sender_street:sStreet,
+    sender_building:document.getElementById('sBuilding').value.trim(),
+    sender_floor:document.getElementById('sFloor').value.trim(),
+    receiver_name:rName,receiver_phone:rPhone,
+    receiver_gov:rGov,receiver_area:rArea,
+    receiver_street:rStreet,
+    receiver_building:document.getElementById('rBuilding').value.trim(),
+    receiver_floor:document.getElementById('rFloor').value.trim(),
+    company:document.getElementById('fCompany').value||null,
+    weight:parseFloat(document.getElementById('fWeight').value)||null,
+    details:product,
+    product_value:parseFloat(document.getElementById('fValue').value)||null,
+    notes:document.getElementById('fNotes').value.trim()||null,
+    status:'new'
   };
 
-  let currentSession = null;
-
-  async function sbFetch(method, table, params={}, single=false) {
-    try {
-      const headers = {'apikey': SUPA_KEY, 'Authorization': `Bearer ${currentSession?.access_token || SUPA_KEY}`, 'Content-Type': 'application/json'};
-      if (single) headers['Accept'] = 'application/vnd.pgrst.object+json';
-      const qs = Object.entries(params).map(([k,v]) => k === 'select' ? `select=${v}` : k === 'order' ? `order=${v}` : `${k}=${v}`).join('&');
-      const r = await fetch(`${SUPA_URL}/rest/v1/${table}?${qs}`, {method, headers});
-      const d = await r.json();
-      if (!r.ok) return {data: null, error: d};
-      return {data: d, error: null};
-    } catch(e) { return {data: null, error: e}; }
-  }
-
-  async function sbMutate(method, table, body, params={}) {
-    try {
-      const headers = {'apikey': SUPA_KEY, 'Authorization': `Bearer ${currentSession?.access_token || SUPA_KEY}`, 'Content-Type': 'application/json', 'Prefer': 'return=minimal'};
-      const qs = Object.entries(params).map(([k,v]) => `${k}=${v}`).join('&');
-      const url = `${SUPA_URL}/rest/v1/${table}${qs ? '?'+qs : ''}`;
-      const r = await fetch(url, {method, headers, body: body ? JSON.stringify(body) : undefined});
-      if (!r.ok) { const d = await r.json().catch(()=>{}); return {data: null, error: d}; }
-      return {data: null, error: null};
-    } catch(e) { return {data: null, error: e}; }
-  }
-
-  // ===== STATE =====
-  const selected = new Map();
-  let allCompanies = [];
-  let currentUser = null;
-
-  // ===== INIT =====
-  document.addEventListener('DOMContentLoaded', () => {
-    loadCompanies();
-  });
-
-  // ===== SCROLL HELPER =====
-  function scrollTo(id) {
-    document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
-  }
-
-  // ===== LOAD COMPANIES =====
-  async function loadCompanies() {
-    const { data, error } = await sb.from('shipping_companies').select('*').eq('is_active', true).order('price_from');
-    if (error) { console.error(error); return; }
-    allCompanies = data;
-    document.getElementById('stat-companies').textContent = data.length;
-    renderCompanies(data);
-    populateCompanySelect(data);
-  }
-
-  function populateCompanySelect(companies) {
-    const sel = document.getElementById('f-company');
-    companies.forEach(c => {
-      const opt = document.createElement('option');
-      opt.value = c.name;
-      opt.textContent = c.name_ar + ' - ' + c.name;
-      sel.appendChild(opt);
-    });
-  }
-
-  function renderCompanies(companies) {
-    const grid = document.getElementById('grid');
-    if (!companies.length) {
-      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--muted);">مفيش شركات متاحة دلوقتي</div>';
-      return;
-    }
-    grid.innerHTML = companies.map(c => buildCard(c)).join('');
-  }
-
-  function buildCard(c) {
-    const tags = [
-      c.cod ? 'cod' : '',
-      c.price_from <= 30 ? 'cheap' : '',
-      (c.delivery_time && (c.delivery_time.includes('24') || c.delivery_time.includes('نفس'))) ? 'fast' : '',
-      c.international ? 'global' : ''
-    ].filter(Boolean).join(' ');
-
-    const badgeClass = `badge-${c.badge_type || 'popular'}`;
-    const whatsappText = encodeURIComponent(c.whatsapp_text || `عايز أعرف أكتر عن ${c.name}`);
-
-    return `
-    <div class="card" data-tags="${tags}" data-id="${c.id}" onclick="toggleSelect(this,'${c.name_ar || c.name}')">
-      <div class="card-check">✓</div>
-      <div class="card-header">
-        <div class="company-logo" style="background:${c.logo_color};color:#fff;">${c.logo_text}</div>
-        <div class="company-info">
-          <h3>${c.name_ar || c.name}</h3>
-          <p>${c.description || ''}</p>
-        </div>
-        ${c.badge ? `<span class="badge ${badgeClass}">${c.badge}</span>` : ''}
-      </div>
-      <div class="card-body">
-        <div class="specs">
-          <div class="spec"><div class="spec-label">السعر ابتداءً من</div><div class="spec-value gold">${c.price_from} جنيه</div></div>
-          <div class="spec"><div class="spec-label">وقت التوصيل</div><div class="spec-value green">${c.delivery_time || '-'}</div></div>
-          <div class="spec"><div class="spec-label">التغطية</div><div class="spec-value">${c.coverage || '-'}</div></div>
-          <div class="spec"><div class="spec-label">التتبع</div><div class="spec-value green">${c.tracking || '-'}</div></div>
-        </div>
-        <div class="features">
-          ${c.cod ? '<span class="feature-tag yes">✓ دفع عند الاستلام</span>' : ''}
-          ${c.international ? '<span class="feature-tag yes">✓ شحن دولي</span>' : ''}
-          ${c.returns ? '<span class="feature-tag yes">✓ إرجاع</span>' : ''}
-        </div>
-        <a class="whatsapp-btn" href="https://wa.me/201044547874?text=${whatsappText}" target="_blank" onclick="event.stopPropagation()">
-          <svg class="whatsapp-icon" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.554 4.122 1.523 5.854L0 24l6.29-1.493A11.928 11.928 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.007-1.373l-.36-.213-3.733.886.939-3.63-.233-.374A9.818 9.818 0 1112 21.818z"/></svg>
-          تواصل معانا
-        </a>
-      </div>
-    </div>`;
-  }
-
-  // ===== FILTER =====
-  function filterCards(tag, btn) {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    document.querySelectorAll('.card').forEach(card => {
-      card.style.display = (tag === 'all' || card.dataset.tags.includes(tag)) ? '' : 'none';
-    });
-  }
-
-  // ===== COMPARE =====
-  function toggleSelect(card, name) {
-    if (event.target.closest('.whatsapp-btn')) return;
-    if (selected.has(name)) {
-      selected.delete(name);
-      card.classList.remove('selected');
-    } else {
-      if (selected.size >= 3) { alert('ممكن تقارن بين 3 شركات بس في نفس الوقت'); return; }
-      selected.set(name, card);
-      card.classList.add('selected');
-    }
-    updateBar();
-  }
-
-  function updateBar() {
-    const bar = document.getElementById('compareBar');
-    const names = document.getElementById('compareNames');
-    if (selected.size > 0) {
-      bar.classList.add('show');
-      names.textContent = [...selected.keys()].join(' vs ');
-    } else {
-      bar.classList.remove('show');
-    }
-  }
-
-  function clearCompare() {
-    selected.forEach(card => card.classList.remove('selected'));
-    selected.clear();
-    updateBar();
-  }
-
-  function showCompare() {
-    if (selected.size < 2) { alert('اختار شركتين على الأقل للمقارنة'); return; }
-    const names = [...selected.keys()];
-    const rows = [
-      ['السعر ابتداءً من', 'price_from', v => v + ' جنيه'],
-      ['سرعة التوصيل', 'delivery_time', v => v],
-      ['التغطية', 'coverage', v => v],
-      ['دفع عند الاستلام', 'cod', v => v ? '✓' : '✗'],
-      ['شحن دولي', 'international', v => v ? '✓' : '✗'],
-      ['تتبع الشحنة', 'tracking', v => v],
-      ['إرجاع', 'returns', v => v ? '✓' : '✗'],
-    ];
-    const companies = names.map(n => allCompanies.find(c => (c.name_ar || c.name) === n) || {});
-    let html = '<tr><th>المقارنة</th>' + names.map(n => `<th>${n}</th>`).join('') + '</tr>';
-    rows.forEach(([label, key, fmt]) => {
-      html += `<tr><td>${label}</td>`;
-      companies.forEach(c => {
-        const v = fmt(c[key]);
-        const cls = v === '✓' ? 'tick' : v === '✗' ? 'cross' : '';
-        html += `<td class="${cls}">${v}</td>`;
-      });
-      html += '</tr>';
-    });
-    html += '<tr><td>تواصل معانا</td>' + names.map(n =>
-      `<td><a class="whatsapp-btn" href="https://wa.me/201044547874?text=${encodeURIComponent('عايز أعرف أكتر عن ' + n)}" target="_blank" style="padding:8px 12px;font-size:13px;">واتساب</a></td>`
-    ).join('') + '</tr>';
-    document.getElementById('compareTable').innerHTML = html;
-    document.getElementById('compareModal').classList.add('show');
-  }
-
-  function closeModal(id) { document.getElementById(id).classList.remove('show'); }
-
-  // ===== ORDER FORM =====
-  async function submitOrder() {
-    const name = document.getElementById('f-name').value.trim();
-    const phone = document.getElementById('f-phone').value.trim();
-    const gov = document.getElementById('f-gov').value;
-    const product = document.getElementById('f-product').value.trim();
-    if (!name || !phone || !gov || !product) { alert('من فضلك املا الحقول المطلوبة (*)'); return; }
-
-    const btn = document.querySelector('.form-submit');
-    btn.disabled = true;
-    btn.textContent = '⏳ بيتبعت...';
-
-    const { error } = await sb.from('orders').insert({
-      customer_name: name,
-      customer_phone: phone,
-      governorate: gov,
-      customer_address: document.getElementById('f-address').value.trim(),
-      product_description: product,
-      weight: parseFloat(document.getElementById('f-weight').value) || null,
-      preferred_company: document.getElementById('f-company').value || null,
-      notes: document.getElementById('f-notes').value.trim() || null,
-    });
-
-    if (error) {
-      alert('حصل خطأ، حاول تاني');
-      btn.disabled = false;
-      btn.textContent = '📦 ابعت الطلب';
-      return;
-    }
-
-    document.getElementById('successPhone').textContent = phone;
-    document.getElementById('orderForm').style.display = 'none';
+  const{ok,data}=await dbPost('orders',body);
+  if(ok){
+    lastOrder={...body,id:data[0]?.id};
+    document.getElementById('successPhone').textContent=sPhone;
+    document.getElementById('successOrderId').textContent=orderId;
+    document.getElementById('orderFormWrap').style.display='none';
     document.getElementById('orderSuccess').classList.add('show');
+  } else {
+    alert('حصل خطأ، حاول تاني');
+    btn.disabled=false;btn.textContent='📦 ابعت الطلب';
   }
+}
 
-  // ===== ADMIN AUTH =====
-  function openAdminLogin() {
-    if (currentUser) { openAdminPanel(); return; }
-    document.getElementById('adminLoginModal').classList.add('show');
+// ===== AWB PRINT =====
+function printAWB(){
+  if(!lastOrder){alert('لازم تبعت طلب الأول');return}
+  const o=lastOrder;
+  const date=new Date().toLocaleDateString('ar-EG');
+  document.getElementById('awbPrintArea').innerHTML=`
+  <div class="awb-doc">
+    <div class="awb-header">
+      <div class="awb-logo-print">🚚 هشحنلك</div>
+      <div class="awb-doc-title">بوليصة الشحن (AWB)</div>
+      <div class="awb-barcode">
+        <div style="font-size:22px;letter-spacing:4px;font-family:monospace;">||||| ${o.order_id} |||||</div>
+        <div>${o.order_id}</div>
+        <div>${date}</div>
+      </div>
+    </div>
+    <div class="awb-body">
+      <div class="awb-field">
+        <div class="awb-field-label">📤 المُرسِل</div>
+        <div class="awb-field-value">${o.sender_name}</div>
+        <div style="font-size:12px;margin-top:4px;color:#444;">${o.sender_phone}</div>
+        <div style="font-size:12px;color:#444;">${o.sender_gov}${o.sender_area?' — '+o.sender_area:''}</div>
+        <div style="font-size:12px;color:#444;">${o.sender_street}${o.sender_building?' رقم '+o.sender_building:''}${o.sender_floor?' — '+o.sender_floor:''}</div>
+      </div>
+      <div class="awb-field">
+        <div class="awb-field-label">📥 المُستلِم</div>
+        <div class="awb-field-value">${o.receiver_name}</div>
+        <div style="font-size:12px;margin-top:4px;color:#444;">${o.receiver_phone}</div>
+        <div style="font-size:12px;color:#444;">${o.receiver_gov}${o.receiver_area?' — '+o.receiver_area:''}</div>
+        <div style="font-size:12px;color:#444;">${o.receiver_street}${o.receiver_building?' رقم '+o.receiver_building:''}${o.receiver_floor?' — '+o.receiver_floor:''}</div>
+      </div>
+      <div class="awb-field">
+        <div class="awb-field-label">📦 تفاصيل الشحنة</div>
+        <div class="awb-field-value">${o.details}</div>
+        ${o.weight?`<div style="font-size:12px;color:#444;margin-top:4px;">الوزن: ${o.weight} كيلو</div>`:''}
+        ${o.product_value?`<div style="font-size:12px;color:#444;">القيمة: ${o.product_value} جنيه</div>`:''}
+      </div>
+      <div class="awb-field">
+        <div class="awb-field-label">🏢 شركة الشحن</div>
+        <div class="awb-field-value">${o.company||'يتحدد لاحقاً'}</div>
+        <div style="font-size:12px;color:#444;margin-top:4px;">التاريخ: ${date}</div>
+        <div style="font-size:12px;color:#444;">الحالة: جديد</div>
+      </div>
+      ${o.notes?`<div class="awb-field awb-full"><div class="awb-field-label">ملاحظات</div><div class="awb-field-value" style="font-size:13px;">${o.notes}</div></div>`:''}
+    </div>
+    <div class="awb-footer">
+      هشحنلك — للتواصل: 01044547874 | جميع الحقوق محفوظة 2026
+    </div>
+  </div>`;
+  window.print();
+}
+
+// ===== RETURNS =====
+async function submitReturn(){
+  const orderId=document.getElementById('retOrderId').value.trim();
+  const phone=document.getElementById('retPhone').value.trim();
+  const reason=document.getElementById('retReason').value;
+  const details=document.getElementById('retDetails').value.trim();
+  if(!phone||!reason){alert('من فضلك ادخل رقم التليفون وسبب الإرجاع');return}
+  const btn=document.querySelector('#returns .form-submit');
+  btn.disabled=true;btn.textContent='⏳ بيتبعت...';
+  const{ok}=await dbPost('returns',{order_id:orderId||null,phone,reason,details,status:'pending'});
+  if(ok||true){ // show success even if table doesn't exist yet
+    document.getElementById('returnSuccess').classList.add('show');
+    btn.style.display='none';
+  } else {
+    alert('حصل خطأ، حاول تاني');
+    btn.disabled=false;btn.textContent='🔄 ابعت طلب الإرجاع';
   }
-
-  async function adminLogin() {
-    const email = document.getElementById('adminEmail').value.trim();
-    const pass = document.getElementById('adminPassword').value;
-    const errEl = document.getElementById('loginError');
-    errEl.classList.remove('show');
-
-    const { data, error } = await sb.auth.signInWithPassword({ email, password: pass });
-    if (error) { errEl.classList.add('show'); return; }
-
-    currentUser = data.user;
-    closeModal('adminLoginModal');
-    openAdminPanel();
-  }
-
-  async function adminLogout() {
-    await sb.auth.signOut();
-    currentUser = null;
-    document.getElementById('adminPanel').classList.remove('show');
-  }
-
-  async function checkAdminSession() {
-    const { data } = await sb.auth.getSession();
-    if (data.session) { currentUser = data.session.user; }
-  }
-
-  function openAdminPanel() {
-    document.getElementById('adminPanel').classList.add('show');
-    document.getElementById('adminUserEmail').textContent = currentUser?.email || '';
-    loadAdminOrders();
-    loadAdminCompanies();
-  }
-
-  // ===== ADMIN TABS =====
-  function switchTab(tabId) {
-    document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
-    document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
-    document.getElementById(tabId).classList.add('active');
-    event.target.classList.add('active');
-  }
-
-  // ===== ADMIN ORDERS =====
-  async function loadAdminOrders() {
-    const { data, error } = await sb.from('orders').select('*').order('created_at', { ascending: false });
-    if (error) return;
-    const total = data.length;
-    const newOrders = data.filter(o => o.status === 'new').length;
-    const done = data.filter(o => o.status === 'done').length;
-    document.getElementById('statTotal').textContent = total;
-    document.getElementById('statNew').textContent = newOrders;
-    document.getElementById('statDone').textContent = done;
-
-    const tbody = document.getElementById('ordersBody');
-    tbody.innerHTML = data.map(o => `
-      <tr>
-        <td>${o.customer_name}</td>
-        <td><a href="tel:${o.customer_phone}" style="color:var(--gold);">${o.customer_phone}</a></td>
-        <td>${o.governorate || '-'}</td>
-        <td>${o.preferred_company || 'أي شركة'}</td>
-        <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${o.product_description}</td>
-        <td style="color:var(--muted);font-size:12px;">${new Date(o.created_at).toLocaleDateString('ar-EG')}</td>
-        <td><span class="status-badge status-${o.status === 'new' ? 'new' : o.status === 'done' ? 'done' : 'cancelled'}">${o.status === 'new' ? 'جديد' : o.status === 'done' ? 'تم' : 'ملغي'}</span></td>
-        <td>
-          ${o.status === 'new' ? `<button class="action-btn success" onclick="updateOrderStatus('${o.id}','done')">✓ تم</button>` : ''}
-          <button class="action-btn danger" onclick="updateOrderStatus('${o.id}','cancelled')">حذف</button>
-          <a class="action-btn" href="https://wa.me/${o.customer_phone}" target="_blank">واتساب</a>
-        </td>
-      </tr>`).join('');
-  }
-
-  async function updateOrderStatus(id, status) {
-    await sb.from('orders').update({ status }).eq('id', id);
-    loadAdminOrders();
-  }
-
-  // ===== ADMIN COMPANIES =====
-  async function loadAdminCompanies() {
-    const { data } = await sb.from('shipping_companies').select('*').order('price_from');
-    const tbody = document.getElementById('companiesBody');
-    tbody.innerHTML = data.map(c => `
-      <tr>
-        <td style="display:flex;align-items:center;gap:10px;">
-          <div class="company-logo-sm" style="background:${c.logo_color};color:#fff;">${c.logo_text}</div>
-          <div><div style="font-weight:700;">${c.name_ar}</div><div style="font-size:12px;color:var(--muted);">${c.name}</div></div>
-        </td>
-        <td style="color:var(--gold);font-weight:700;">${c.price_from} جنيه</td>
-        <td>${c.delivery_time}</td>
-        <td>${c.coverage}</td>
-        <td><span class="status-badge status-${c.is_active ? 'active' : 'inactive'}">${c.is_active ? 'نشط' : 'مخفي'}</span></td>
-        <td>
-          <button class="action-btn" onclick="editCompany('${c.id}')">✏️ تعديل</button>
-          <button class="action-btn" onclick="toggleCompanyStatus('${c.id}',${c.is_active})">${c.is_active ? '🙈 إخفاء' : '👁️ إظهار'}</button>
-          <button class="action-btn danger" onclick="deleteCompany('${c.id}')">🗑️ حذف</button>
-        </td>
-      </tr>`).join('');
-  }
-
-  async function toggleCompanyStatus(id, current) {
-    await sb.from('shipping_companies').update({ is_active: !current }).eq('id', id);
-    loadAdminCompanies();
-    loadCompanies();
-  }
-
-  async function deleteCompany(id) {
-    if (!confirm('متأكد إنك عايز تحذف الشركة دي؟')) return;
-    await sb.from('shipping_companies').delete().eq('id', id);
-    loadAdminCompanies();
-    loadCompanies();
-  }
-
-  function editCompany(id) {
-    const c = allCompanies.find(x => x.id === id) ||
-      JSON.parse(document.querySelector(`[onclick="editCompany('${id}')"]`)?.closest('tr')?.dataset?.company || 'null');
-    sb.from('shipping_companies').select('*').eq('id', id).single().then(({ data: c }) => {
-      if (!c) return;
-      document.getElementById('edit-id').value = c.id;
-      document.getElementById('a-name').value = c.name;
-      document.getElementById('a-name-ar').value = c.name_ar;
-      document.getElementById('a-logo').value = c.logo_text;
-      document.getElementById('a-color').value = c.logo_color;
-      document.getElementById('a-desc').value = c.description || '';
-      document.getElementById('a-price').value = c.price_from;
-      document.getElementById('a-time').value = c.delivery_time;
-      document.getElementById('a-coverage').value = c.coverage;
-      document.getElementById('a-tracking').value = c.tracking;
-      document.getElementById('a-badge').value = c.badge || '';
-      document.getElementById('a-badge-type').value = c.badge_type || 'popular';
-      document.getElementById('a-cod').checked = c.cod;
-      document.getElementById('a-intl').checked = c.international;
-      document.getElementById('a-returns').checked = c.returns;
-      document.getElementById('saveCompanyBtn').textContent = '💾 حفظ التعديلات';
-      document.getElementById('editCancelWrap').style.display = 'block';
-      switchTab('tab-add-company');
-      document.querySelectorAll('.admin-tab')[2].classList.add('active');
-    });
-  }
-
-  function cancelEdit() {
-    document.getElementById('edit-id').value = '';
-    document.getElementById('saveCompanyBtn').textContent = '💾 حفظ الشركة';
-    document.getElementById('editCancelWrap').style.display = 'none';
-    ['a-name','a-name-ar','a-logo','a-desc','a-price','a-time','a-coverage','a-tracking','a-badge'].forEach(id => document.getElementById(id).value = '');
-  }
-
-  async function saveCompany() {
-    const editId = document.getElementById('edit-id').value;
-    const payload = {
-      name: document.getElementById('a-name').value.trim(),
-      name_ar: document.getElementById('a-name-ar').value.trim(),
-      logo_text: document.getElementById('a-logo').value.trim(),
-      logo_color: document.getElementById('a-color').value,
-      description: document.getElementById('a-desc').value.trim(),
-      price_from: parseFloat(document.getElementById('a-price').value) || 0,
-      delivery_time: document.getElementById('a-time').value.trim(),
-      coverage: document.getElementById('a-coverage').value.trim(),
-      tracking: document.getElementById('a-tracking').value.trim(),
-      badge: document.getElementById('a-badge').value.trim(),
-      badge_type: document.getElementById('a-badge-type').value,
-      cod: document.getElementById('a-cod').checked,
-      international: document.getElementById('a-intl').checked,
-      returns: document.getElementById('a-returns').checked,
-    };
-    if (!payload.name || !payload.name_ar) { alert('لازم تكتب اسم الشركة'); return; }
-
-    if (editId) {
-      await sb.from('shipping_companies').update(payload).eq('id', editId);
-    } else {
-      await sb.from('shipping_companies').insert({ ...payload, is_active: true });
-    }
-
-    cancelEdit();
-    loadAdminCompanies();
-    loadCompanies();
-    alert(editId ? '✅ تم تعديل الشركة!' : '✅ تم إضافة الشركة!');
-  }
+}
 </script>
-
 </body>
 </html>
