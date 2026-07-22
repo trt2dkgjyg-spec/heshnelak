@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js"; 
+import { getFirestore, doc, getDoc, setDoc, collection, addDoc, query, orderBy, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js"; 
 
 const firebaseConfig = {
   apiKey: "AIzaSyA_BpK4vK0xEuryDqTcJH12--8lwkrmwok",
@@ -17,12 +17,16 @@ const db = getFirestore(app);
 
 // DOM Elements
 const authOverlay = document.getElementById('firebase-auth-overlay');
+const authFormContainer = document.getElementById('auth-form-container');
+const authLoadingSpinner = document.getElementById('auth-loading-spinner');
 const emailInput = document.getElementById('auth-email');
 const passwordInput = document.getElementById('auth-password');
 const loginBtn = document.getElementById('auth-login-btn');
 const forgotBtn = document.getElementById('auth-forgot-btn');
 const errorDiv = document.getElementById('auth-error');
 const logoutBtn = document.getElementById('auth-logout-btn');
+const headerEmail = document.getElementById('header-admin-email');
+const headerTime = document.getElementById('header-datetime');
 
 function showError(msg) {
   errorDiv.textContent = msg;
@@ -33,15 +37,27 @@ function hideError() {
   errorDiv.style.display = 'none';
 }
 
+// Clock Setup
+setInterval(() => {
+  if(!headerTime) return;
+  const dt = new Date();
+  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+  headerTime.textContent = dt.toLocaleString('ar-EG', options);
+}, 1000);
+
 // Auth State Listener
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     authOverlay.style.display = 'none';
     logoutBtn.style.display = 'flex';
+    if(headerEmail) headerEmail.textContent = user.email;
     await initAdminSession(user);
   } else {
     authOverlay.style.display = 'flex';
+    if(authFormContainer) authFormContainer.style.display = 'block';
+    if(authLoadingSpinner) authLoadingSpinner.style.display = 'none';
     logoutBtn.style.display = 'none';
+    if(headerEmail) headerEmail.textContent = 'غير متصل';
     emailInput.value = '';
     passwordInput.value = '';
   }
@@ -67,6 +83,22 @@ async function initAdminSession(user) {
       if(window.allProducts) {
          window.allProducts = JSON.parse(prodsSnap.data().data);
          if(typeof window.renderProductsGrid === 'function') window.renderProductsGrid();
+         if(typeof window.renderCatCounts === 'function') window.renderCatCounts();
+      }
+    }
+    
+    const settingsSnap = await getDoc(doc(db, 'system', 'settings'));
+    if (settingsSnap.exists()) {
+      originalSetItem.call(localStorage, 'alanwar_settings_v2', settingsSnap.data().data);
+      if(typeof window.loadSettings === 'function') window.loadSettings();
+    }
+    
+    const ordersSnap = await getDoc(doc(db, 'system', 'orders'));
+    if (ordersSnap.exists()) {
+      originalSetItem.call(localStorage, 'alanwar_orders', ordersSnap.data().data);
+      if(window.ordersList) {
+         window.ordersList = JSON.parse(ordersSnap.data().data);
+         if(typeof window.renderOrders === 'function') window.renderOrders();
       }
     }
     
@@ -79,12 +111,97 @@ async function initAdminSession(user) {
        role = 'superadmin';
     }
     
-    if(role !== 'superadmin') {
-       const settingsTabBtn = document.querySelector('.tab-btn[onclick="switchTab(\'settings\')"]');
-       if(settingsTabBtn) settingsTabBtn.style.display = 'none';
-    }
+    applyRBAC(role);
   } catch(e) { console.error(e); }
 }
+
+function applyRBAC(role) {
+  if(role !== 'superadmin') {
+     const settingsTabBtn = document.querySelector('.tab-btn[onclick="switchTab(\'settings\')"]');
+     if(settingsTabBtn) settingsTabBtn.style.display = 'none';
+     
+     const logsTabBtn = document.getElementById('tab-btn-logs');
+     if(logsTabBtn) logsTabBtn.style.display = 'none';
+  } else {
+     loadActivityLogs();
+  }
+}
+
+// Activity Logs Loader
+function loadActivityLogs() {
+  const logsQ = query(collection(db, 'system', 'activity_logs', 'logs'), orderBy('timestamp', 'desc'), limit(150));
+  onSnapshot(logsQ, (snapshot) => {
+    const tbody = document.getElementById('activityLogsTableBody');
+    if(!tbody) return;
+    tbody.innerHTML = '';
+    if(snapshot.empty) {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:30px;">لا توجد نشاطات مسجلة بعد</td></tr>';
+      return;
+    }
+    snapshot.forEach(docSnap => {
+       const d = docSnap.data();
+       const tr = document.createElement('tr');
+       const dateStr = new Date(d.timestamp).toLocaleString('ar-EG', {
+          year: 'numeric', month: 'numeric', day: 'numeric',
+          hour: '2-digit', minute: '2-digit', hour12: true
+       });
+       tr.innerHTML = `
+         <td style="direction:ltr; text-align:right;">${dateStr}</td>
+         <td style="font-weight:bold; color:var(--primary);">${d.email}</td>
+         <td><span style="background:rgba(201, 168, 76, 0.2); color:#C9A84C; padding:4px 8px; border-radius:4px; font-size:13px; font-weight:bold;">${d.action}</span></td>
+         <td style="color:var(--silver);">${d.details}</td>
+       `;
+       tbody.appendChild(tr);
+    });
+  });
+}
+
+// Activity Logging Hook Function
+async function logActivity(action, details) {
+  if(!auth.currentUser) return;
+  try {
+    await addDoc(collection(db, 'system', 'activity_logs', 'logs'), {
+      email: auth.currentUser.email,
+      action: action,
+      details: details,
+      timestamp: new Date().getTime()
+    });
+  } catch(e) { console.error("Activity Logging failed", e); }
+}
+
+// Hook into existing global functions to track changes automatically
+setTimeout(() => {
+  if(window.saveProduct) {
+    const origSaveProduct = window.saveProduct;
+    window.saveProduct = function() {
+      try {
+        const pName = document.getElementById('p_name_ar') ? document.getElementById('p_name_ar').value : 'منتج';
+        const isNew = document.getElementById('editProductIdx') && document.getElementById('editProductIdx').value === '';
+        logActivity(isNew ? 'إضافة منتج جديد' : 'تعديل منتج موجود', `المنتج: ${pName}`);
+      } catch(e){}
+      return origSaveProduct.apply(this, arguments);
+    };
+  }
+  
+  if(window.deleteProduct) {
+    const origDel = window.deleteProduct;
+    window.deleteProduct = function(idx) {
+      try {
+        const prod = (window.allProducts && window.allProducts[idx]) ? window.allProducts[idx].name.ar : 'منتج مجهول';
+        logActivity('حذف منتج', `تم حذف: ${prod}`);
+      } catch(e){}
+      return origDel.apply(this, arguments);
+    };
+  }
+  
+  if(window.saveSiteSettings) {
+    const origSet = window.saveSiteSettings;
+    window.saveSiteSettings = function() {
+      logActivity('تعديل الإعدادات', 'تم تغيير إعدادات الموقع الأساسية');
+      return origSet.apply(this, arguments);
+    };
+  }
+}, 3000);
 
 // Login
 loginBtn.addEventListener('click', async () => {
@@ -98,6 +215,7 @@ loginBtn.addEventListener('click', async () => {
   
   try {
     await signInWithEmailAndPassword(auth, email, password);
+    logActivity('تسجيل دخول', 'عملية دخول ناجحة للوحة التحكم');
   } catch (error) {
     showError('بيانات الدخول غير صحيحة!');
   } finally {
@@ -119,5 +237,8 @@ forgotBtn.addEventListener('click', async () => {
 
 // Logout
 logoutBtn.addEventListener('click', () => {
-  if(confirm('هل أنت متأكد من تسجيل الخروج؟')) signOut(auth);
+  if(confirm('هل أنت متأكد من تسجيل الخروج؟')) {
+    logActivity('تسجيل خروج', 'تم الخروج من النظام');
+    setTimeout(() => signOut(auth), 500); // delay to let log finish
+  }
 });
