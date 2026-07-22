@@ -358,25 +358,6 @@ body.light-mode select option { background-color: #ffffff; color: #1a1a2e; }
 </head>
 <body>
 
-<!-- FIREBASE AUTH OVERLAY -->
-<div id="firebase-auth-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0A1628; z-index: 999999; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-family: 'Cairo', sans-serif;">
-  <div style="background: rgba(255,255,255,0.05); padding: 40px; border-radius: 16px; border: 1px solid rgba(201, 168, 76, 0.3); text-align: center; max-width: 400px; width: 90%; box-shadow: 0 10px 40px rgba(0,0,0,0.5); backdrop-filter: blur(10px);">
-    <div style="width: 70px; height: 70px; background: linear-gradient(135deg, #C9A84C, #f1d789); border-radius: 15px; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: bold; color: #0A1628;">A</div>
-    <h2 style="margin-bottom: 5px; color: #fff;">تسجيل الدخول للإدارة</h2>
-    <p style="color: #94a3b8; font-size: 14px; margin-bottom: 25px;">يرجى إدخال بياناتك للوصول للوحة التحكم</p>
-    
-    <input type="email" id="auth-email" placeholder="البريد الإلكتروني" style="width: 100%; padding: 12px 16px; margin-bottom: 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: white; outline: none; font-family: inherit;">
-    
-    <input type="password" id="auth-password" placeholder="كلمة المرور" style="width: 100%; padding: 12px 16px; margin-bottom: 20px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: white; outline: none; font-family: inherit;">
-    
-    <div id="auth-error" style="color: #ef4444; font-size: 13px; margin-bottom: 15px; display: none;"></div>
-    
-    <button id="auth-login-btn" style="width: 100%; padding: 12px; border-radius: 8px; border: none; background: #C9A84C; color: #0A1628; font-weight: bold; font-size: 16px; cursor: pointer; transition: background 0.2s; font-family: inherit;">دخول</button>
-    
-    <button id="auth-forgot-btn" style="background: none; border: none; color: #C9A84C; font-size: 13px; margin-top: 15px; cursor: pointer; text-decoration: underline; font-family: inherit;">نسيت كلمة المرور؟</button>
-  </div>
-</div>
-
 <header>
   <a href="#" class="anwar-logo-top">
     <div class="anwar-logo-side en">
@@ -392,7 +373,6 @@ body.light-mode select option { background-color: #ffffff; color: #1a1a2e; }
     </div>
   </a>
   <div class="header-actions">
-    <button id="auth-logout-btn" class="btn-site-link" style="background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.3); color: #ef4444; display: none; cursor: pointer;">تسجيل خروج</button>
     <span class="admin-badge">⚡ متصل بالنظام الحي</span>
     <a href="index.html" class="btn-site-link"><span>🌐</span> عرض الموقع للعملاء</a>
   </div>
@@ -987,7 +967,6 @@ body.light-mode select option { background-color: #ffffff; color: #1a1a2e; }
 
 <div class="toast" id="toast"></div>
 
-<script type="module" src="firebase_admin.js"></script>
 <script>
 // ── SYNCHRONIZED STORAGE KEYS ─────────────────────────────
 const STORAGE_KEY_PRODUCTS = 'alanwar_products_v2';
