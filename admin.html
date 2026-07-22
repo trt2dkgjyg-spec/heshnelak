@@ -360,7 +360,12 @@ body.light-mode select option { background-color: #ffffff; color: #1a1a2e; }
 
 <!-- FIREBASE AUTH OVERLAY -->
 <div id="firebase-auth-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0A1628; z-index: 999999; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-family: 'Cairo', sans-serif;">
-  <div style="background: rgba(255,255,255,0.05); padding: 40px; border-radius: 16px; border: 1px solid rgba(201, 168, 76, 0.3); text-align: center; max-width: 400px; width: 90%; box-shadow: 0 10px 40px rgba(0,0,0,0.5); backdrop-filter: blur(10px);">
+  <div id="auth-loading-spinner" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 15px;">
+    <div style="width: 50px; height: 50px; border: 4px solid rgba(201,168,76,0.3); border-top-color: #C9A84C; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+    <div style="color: #C9A84C; font-weight: bold;">جاري التحميل...</div>
+  </div>
+  <style>@keyframes spin { 100% { transform: rotate(360deg); } }</style>
+  <div id="auth-form-container" style="display: none; background: rgba(255,255,255,0.05); padding: 40px; border-radius: 16px; border: 1px solid rgba(201, 168, 76, 0.3); text-align: center; max-width: 400px; width: 90%; box-shadow: 0 10px 40px rgba(0,0,0,0.5); backdrop-filter: blur(10px);">
     <div style="width: 70px; height: 70px; background: linear-gradient(135deg, #C9A84C, #f1d789); border-radius: 15px; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: bold; color: #0A1628;">A</div>
     <h2 style="margin-bottom: 5px; color: #fff;">تسجيل الدخول للإدارة</h2>
     <p style="color: #94a3b8; font-size: 14px; margin-bottom: 25px;">يرجى إدخال بياناتك للوصول للوحة التحكم</p>
@@ -392,8 +397,11 @@ body.light-mode select option { background-color: #ffffff; color: #1a1a2e; }
     </div>
   </a>
   <div class="header-actions">
+    <div style="display: flex; flex-direction: column; text-align: left; margin-left: 15px; padding-left: 15px; border-left: 1px solid rgba(255,255,255,0.1);">
+      <span id="header-admin-email" style="font-size: 14px; font-weight: bold; color: white;">جاري التحميل...</span>
+      <span id="header-datetime" style="font-size: 12px; color: var(--silver); margin-top: 2px;">--</span>
+    </div>
     <button id="auth-logout-btn" class="btn-site-link" style="background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.3); color: #ef4444; display: none; cursor: pointer;">تسجيل خروج</button>
-    <span class="admin-badge">⚡ متصل بالنظام الحي</span>
     <a href="index.html" class="btn-site-link"><span>🌐</span> عرض الموقع للعملاء</a>
   </div>
 </header>
@@ -409,6 +417,7 @@ body.light-mode select option { background-color: #ffffff; color: #1a1a2e; }
       <button class="tab-btn" onclick="switchTab('products')" data-i18n="🖼️ المنتجات والكتالوج" style="width:100%; justify-content:flex-start; text-align:right;">🖼️ المنتجات والكتالوج</button>
       <button class="tab-btn" onclick="switchTab('calculator')" data-i18n="🧮 حاسبة التكلفة للأدمن" style="width:100%; justify-content:flex-start; text-align:right;">🧮 حاسبة التكلفة للأدمن</button>
       <button class="tab-btn" onclick="switchTab('settings')" data-i18n="⚙️ إعدادات الموقع والعناوين" style="width:100%; justify-content:flex-start; text-align:right;">⚙️ إعدادات الموقع والعناوين</button>
+      <button class="tab-btn" onclick="switchTab('logs')" id="tab-btn-logs" style="width:100%; justify-content:flex-start; text-align:right;">👁️ سجل النشاطات والمراقبة</button>
     </div>
   </aside>
 
@@ -818,6 +827,31 @@ body.light-mode select option { background-color: #ffffff; color: #1a1a2e; }
             <input type="text" id="setSocialWa" placeholder="201000000000">
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 5: ACTIVITY LOGS -->
+  <div class="tab-panel" id="tab_logs">
+    <div class="admin-panel">
+      <div class="panel-header">
+        <h2 style="margin:0; font-size:20px; color:var(--dark);">👁️ سجل النشاطات (Activity Logs)</h2>
+        <p style="margin:5px 0 0; color:var(--silver); font-size:14px;">مراقبة تحركات المشرفين على لوحة التحكم (خاص بالمدير العام فقط)</p>
+      </div>
+      <div class="table-responsive" style="margin-top: 20px;">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>التاريخ والوقت</th>
+              <th>المشرف (الإيميل)</th>
+              <th>نوع العملية</th>
+              <th>التفاصيل</th>
+            </tr>
+          </thead>
+          <tbody id="activityLogsTableBody">
+            <tr><td colspan="4" style="text-align:center; padding:30px; color:var(--silver);">جاري التحميل...</td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
