@@ -383,7 +383,9 @@ body.light-mode select option { background-color: #ffffff; color: #1a1a2e; }
 </div>
 
 <header>
-  <a href="#" class="anwar-logo-top">
+  <div style="display:flex; align-items:center; gap:10px;">
+    <button id="sidebarToggleBtn" style="background:none; border:none; color:inherit; font-size:24px; cursor:pointer; padding:5px; z-index:9999;">☰</button>
+    <a href="#" class="anwar-logo-top">
     <div class="anwar-logo-side en">
       <div class="red-title">Al-Anwar</div>
       <div class="sub-text">Trading and Distribution Company</div>
@@ -396,9 +398,10 @@ body.light-mode select option { background-color: #ffffff; color: #1a1a2e; }
       <div class="sub-text">للتجارة و التوزيع | لوحة التحكم</div>
     </div>
   </a>
+  </div>
   <div class="header-actions">
     <div style="display: flex; flex-direction: column; text-align: left; margin-left: 15px; padding-left: 15px; border-left: 1px solid rgba(255,255,255,0.1);">
-      <span id="header-admin-email" style="font-size: 14px; font-weight: bold; color: white;">جاري التحميل...</span>
+      <span id="header-admin-email" style="font-size: 14px; font-weight: bold; color: inherit;">جاري التحميل...</span>
       <span id="header-datetime" style="font-size: 12px; color: var(--silver); margin-top: 2px;">--</span>
     </div>
     <button id="auth-logout-btn" class="btn-site-link" style="background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.3); color: #ef4444; display: none; cursor: pointer;">تسجيل خروج</button>
@@ -409,7 +412,7 @@ body.light-mode select option { background-color: #ffffff; color: #1a1a2e; }
 <div class="dashboard-container" style="display:flex; flex-wrap:wrap; gap:30px; align-items:flex-start;">
   
   <!-- SIDEBAR MENU -->
-  <aside class="admin-sidebar" style="width: 280px; flex-shrink: 0; background: var(--navy); padding: 24px; border-radius: var(--radius); border: 1px solid rgba(255,255,255,0.1); position: sticky; top: 30px; box-shadow: var(--shadow);">
+  <aside class="admin-sidebar" id="adminSidebar" style="width: 280px; flex-shrink: 0; background: var(--navy); padding: 24px; border-radius: var(--radius); border: 1px solid rgba(255,255,255,0.1); position: sticky; top: 30px; box-shadow: var(--shadow); display: none;">
     <h3 data-i18n="📌 القائمة الرئيسية" style="color:var(--white); font-size:17px; margin-bottom:18px; padding-bottom:12px; border-bottom:1px solid rgba(255,255,255,0.1);">📌 القائمة الرئيسية</h3>
     <div class="nav-tabs" style="display:flex; flex-direction:column; gap:10px; border:none; padding:0; margin:0;">
       <button class="tab-btn active" onclick="switchTab('orders')" data-i18n="📋 الطلبات وبوليصات الشحن" style="width:100%; justify-content:flex-start; text-align:right;">📋 الطلبات وبوليصات الشحن</button>
@@ -1061,6 +1064,11 @@ body.light-mode select option { background-color: #ffffff; color: #1a1a2e; }
 
 <script type="module" src="firebase_admin.js"></script>
 <script>
+document.getElementById('sidebarToggleBtn').addEventListener('click', () => {
+  const sb = document.getElementById('adminSidebar');
+  sb.style.display = (sb.style.display === 'none' || sb.style.display === '') ? 'block' : 'none';
+});
+
 // ── SYNCHRONIZED STORAGE KEYS ─────────────────────────────
 const STORAGE_KEY_PRODUCTS = 'alanwar_products_v2';
 const STORAGE_KEY_ORDERS = 'alanwar_orders_v2';
