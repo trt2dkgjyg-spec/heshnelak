@@ -418,6 +418,7 @@ body.light-mode select option { background-color: #ffffff; color: #1a1a2e; }
       <button class="tab-btn" onclick="switchTab('calculator')" data-i18n="🧮 حاسبة التكلفة للأدمن" style="width:100%; justify-content:flex-start; text-align:right;">🧮 حاسبة التكلفة للأدمن</button>
       <button class="tab-btn" onclick="switchTab('settings')" data-i18n="⚙️ إعدادات الموقع والعناوين" style="width:100%; justify-content:flex-start; text-align:right;">⚙️ إعدادات الموقع والعناوين</button>
       <button class="tab-btn" onclick="switchTab('logs')" id="tab-btn-logs" style="width:100%; justify-content:flex-start; text-align:right;">👁️ سجل النشاطات والمراقبة</button>
+      <button class="tab-btn" onclick="switchTab('admins')" id="tab-btn-admins" style="width:100%; justify-content:flex-start; text-align:right;">👥 إدارة المشرفين</button>
     </div>
   </aside>
 
@@ -849,6 +850,43 @@ body.light-mode select option { background-color: #ffffff; color: #1a1a2e; }
             </tr>
           </thead>
           <tbody id="activityLogsTableBody">
+            <tr><td colspan="4" style="text-align:center; padding:30px; color:var(--silver);">جاري التحميل...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 6: ADMINS MANAGEMENT -->
+  <div class="tab-panel" id="tab_admins">
+    <div class="admin-panel">
+      <div class="panel-header">
+        <h2 style="margin:0; font-size:20px; color:var(--dark);">👥 إدارة المشرفين</h2>
+        <p style="margin:5px 0 0; color:var(--silver); font-size:14px;">إنشاء وتعديل وحظر حسابات المشرفين (خاص بالمدير العام فقط)</p>
+      </div>
+      
+      <!-- Create New Admin Form -->
+      <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; margin-top: 20px;">
+        <h3 style="color:var(--primary); margin-top:0; margin-bottom:15px;">➕ إضافة مشرف جديد</h3>
+        <div style="display:flex; gap:15px; align-items:center; flex-wrap:wrap;">
+          <input type="email" id="newAdminEmail" placeholder="الإيميل الجديد" style="flex:1; min-width:200px; padding:10px; border-radius:6px; border:1px solid rgba(255,255,255,0.1); background:rgba(0,0,0,0.2); color:white;">
+          <input type="password" id="newAdminPassword" placeholder="كلمة المرور (6 أحرف على الأقل)" style="flex:1; min-width:200px; padding:10px; border-radius:6px; border:1px solid rgba(255,255,255,0.1); background:rgba(0,0,0,0.2); color:white;">
+          <button id="createNewAdminBtn" style="background:var(--primary); color:var(--navy); font-weight:bold; padding:10px 20px; border:none; border-radius:6px; cursor:pointer;">إنشاء الحساب</button>
+        </div>
+        <div id="createAdminMsg" style="margin-top:10px; font-size:14px; display:none;"></div>
+      </div>
+
+      <div class="table-responsive" style="margin-top: 30px;">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>الإيميل</th>
+              <th>الصلاحية</th>
+              <th>تاريخ الإنشاء</th>
+              <th>إجراءات</th>
+            </tr>
+          </thead>
+          <tbody id="adminsTableBody">
             <tr><td colspan="4" style="text-align:center; padding:30px; color:var(--silver);">جاري التحميل...</td></tr>
           </tbody>
         </table>
