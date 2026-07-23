@@ -151,15 +151,20 @@ function loadAdminsList() {
        
        let statusHtml = '';
        let actionHtml = '';
-       if(u.role === 'superadmin') {
-          statusHtml = `<span style="color:#C9A84C; font-weight:bold;">مدير عام</span>`;
-          actionHtml = `<span style="color:var(--silver);">لا يمكن التعديل</span>`;
-       } else if (u.role === 'suspended') {
-          statusHtml = `<span style="color:#ef4444; font-weight:bold;">محظور</span>`;
-          actionHtml = `<button onclick="window.toggleAdminRole('${uid}', 'admin')" style="background:#22c55e; color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer;">تفعيل</button>`;
-       } else {
-          statusHtml = `<span style="color:#3b82f6; font-weight:bold;">مشرف عادي</span>`;
-          actionHtml = `<button onclick="window.toggleAdminRole('${uid}', 'suspended')" style="background:#ef4444; color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer;">حظر</button>`;
+       if(u.role === 'superadmin') { 
+          statusHtml = `<span style="color:#C9A84C; font-weight:bold;">مدير عام</span>`; 
+          actionHtml = `<span style="color:var(--silver);">صلاحيات كاملة</span>`; 
+       } 
+       else if (u.role === 'suspended') { 
+          statusHtml = `<span style="color:#ef4444; font-weight:bold;">محظور</span>`; 
+          actionHtml = `<button onclick="window.toggleAdminRole('${uid}', 'admin')" style="background:#22c55e; color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer;">تفعيل</button>`; 
+       } 
+       else { 
+          statusHtml = `<span style="color:#3b82f6; font-weight:bold;">مشرف عادي</span>`; 
+          actionHtml = `
+            <button onclick="window.toggleAdminRole('${uid}', 'suspended')" style="background:#ef4444; color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer; margin-left:5px;">حظر</button>
+            <button onclick="window.toggleAdminRole('${uid}', 'superadmin')" style="background:#C9A84C; color:var(--dark); font-weight:bold; border:none; padding:5px 10px; border-radius:4px; cursor:pointer;">ترقية لمدير 👑</button>
+          `; 
        }
        
        const dateStr = u.created_at ? new Date(u.created_at).toLocaleDateString('ar-EG') : 'غير محدد';
@@ -176,11 +181,13 @@ function loadAdminsList() {
 }
 
 window.toggleAdminRole = async function(uid, newRole) {
-  if(!confirm(`هل أنت متأكد من ${newRole === 'suspended' ? 'حظر' : 'تفعيل'} هذا المشرف؟`)) return;
-  try {
-    await updateDoc(doc(db, 'users', uid), { role: newRole });
-    logActivity(newRole === 'suspended' ? 'حظر مشرف' : 'تفعيل مشرف', `المعرف: ${uid}`);
-  } catch(e) { alert("حدث خطأ أثناء التعديل."); }
+  let actionText = newRole === 'suspended' ? 'حظر' : (newRole === 'superadmin' ? 'ترقية' : 'تفعيل');
+  if(!confirm(`هل أنت متأكد من ${actionText} هذا المشرف؟`)) return;
+  try { 
+      await updateDoc(doc(db, 'users', uid), { role: newRole }); 
+      logActivity(`${actionText} مشرف`, `المعرف: ${uid}`); 
+  } 
+  catch(e) { alert("حدث خطأ أثناء التعديل."); }
 }
 
 const createAdminBtn = document.getElementById('createNewAdminBtn');
