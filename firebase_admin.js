@@ -15,6 +15,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+// DOM Elements
 const authOverlay = document.getElementById('firebase-auth-overlay');
 const authFormContainer = document.getElementById('auth-form-container');
 const authLoadingSpinner = document.getElementById('auth-loading-spinner');
@@ -27,15 +28,24 @@ const logoutBtn = document.getElementById('auth-logout-btn');
 const headerEmail = document.getElementById('header-admin-email');
 const headerTime = document.getElementById('header-datetime');
 
-function showError(msg) { errorDiv.textContent = msg; errorDiv.style.display = 'block'; }
-function hideError() { errorDiv.style.display = 'none'; }
+function showError(msg) {
+  errorDiv.textContent = msg;
+  errorDiv.style.display = 'block';
+}
 
+function hideError() {
+  errorDiv.style.display = 'none';
+}
+
+// Clock Setup
 setInterval(() => {
   if(!headerTime) return;
+  const dt = new Date();
   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
-  headerTime.textContent = new Date().toLocaleString('ar-EG', options);
+  headerTime.textContent = dt.toLocaleString('ar-EG', options);
 }, 1000);
 
+// Auth State Listener
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     authOverlay.style.display = 'none';
@@ -48,10 +58,12 @@ onAuthStateChanged(auth, async (user) => {
     if(authLoadingSpinner) authLoadingSpinner.style.display = 'none';
     logoutBtn.style.display = 'none';
     if(headerEmail) headerEmail.textContent = 'غير متصل';
-    emailInput.value = ''; passwordInput.value = '';
+    emailInput.value = '';
+    passwordInput.value = '';
   }
 });
 
+// Proxy localStorage to automatically sync to Firestore
 const originalSetItem = localStorage.setItem;
 localStorage.setItem = async function(key, value) {
   originalSetItem.apply(this, arguments);
@@ -68,52 +80,96 @@ async function initAdminSession(user) {
     const prodsSnap = await getDoc(doc(db, 'system', 'products'));
     if (prodsSnap.exists()) {
       originalSetItem.call(localStorage, 'alanwar_products_v2', prodsSnap.data().data);
-      if(window.allProducts) { window.allProducts = JSON.parse(prodsSnap.data().data); if(window.renderProductsGrid) window.renderProductsGrid(); }
+      if(window.allProducts) {
+         window.allProducts = JSON.parse(prodsSnap.data().data);
+         if(typeof window.renderProductsGrid === 'function') window.renderProductsGrid();
+         if(typeof window.renderCatCounts === 'function') window.renderCatCounts();
+      }
     }
+    
     const settingsSnap = await getDoc(doc(db, 'system', 'settings'));
     if (settingsSnap.exists()) {
       originalSetItem.call(localStorage, 'alanwar_settings_v2', settingsSnap.data().data);
-      if(window.loadSettings) window.loadSettings();
+      if(typeof window.loadSettings === 'function') window.loadSettings();
     }
+    
     const ordersSnap = await getDoc(doc(db, 'system', 'orders'));
     if (ordersSnap.exists()) {
       originalSetItem.call(localStorage, 'alanwar_orders', ordersSnap.data().data);
-      if(window.ordersList) { window.ordersList = JSON.parse(ordersSnap.data().data); if(window.renderOrders) window.renderOrders(); }
+      if(window.ordersList) {
+         window.ordersList = JSON.parse(ordersSnap.data().data);
+         if(typeof window.renderOrders === 'function') window.renderOrders();
+      }
     }
     
     const userSnap = await getDoc(doc(db, 'users', user.uid));
     let role = 'admin';
-    if(userSnap.exists()) { role = userSnap.data().role; } 
-    else { await setDoc(doc(db, 'users', user.uid), { email: user.email, role: 'superadmin', created_at: Date.now() }); role = 'superadmin'; }
+    if(userSnap.exists()) {
+       role = userSnap.data().role;
+    } else {
+       await setDoc(doc(db, 'users', user.uid), { email: user.email, role: 'superadmin', created_at: Date.now() });
+       role = 'superadmin';
+    }
     
     applyRBAC(role);
   } catch(e) { console.error(e); }
 }
 
 function applyRBAC(role) {
-  if (role === 'suspended') { alert('عفواً، تم إيقاف حسابك من قبل الإدارة.'); signOut(auth); return; }
+  if (role === 'suspended') {
+     alert('تم إيقاف حسابك من قبل الإدارة.');
+     signOut(auth);
+     return;
+  }
   
   if(role !== 'superadmin') {
-     ['settings', 'logs', 'admins'].forEach(id => {
-       const btn = document.querySelector(`.tab-btn[onclick="switchTab('${id}')"]`) || document.getElementById(`tab-btn-${id}`);
-       if(btn) btn.style.display = 'none';
-     });
-  } else { loadActivityLogs(); loadAdminsList(); }
+     const settingsTabBtn = document.querySelector('.tab-btn[onclick="switchTab(\\'settings\\')"]');
+     if(settingsTabBtn) settingsTabBtn.style.display = 'none';
+     
+     const logsTabBtn = document.getElementById('tab-btn-logs');
+     if(logsTabBtn) logsTabBtn.style.display = 'none';
+     
+     const adminsTabBtn = document.getElementById('tab-btn-admins');
+     if(adminsTabBtn) adminsTabBtn.style.display = 'none';
+  } else {
+     loadActivityLogs();
+     loadAdminsList();
+  }
 }
 
+// Admins Management Loader
 function loadAdminsList() {
-  onSnapshot(collection(db, 'users'), (snapshot) => {
+  const usersRef = collection(db, 'users');
+  onSnapshot(usersRef, (snapshot) => {
     const tbody = document.getElementById('adminsTableBody');
     if(!tbody) return;
     tbody.innerHTML = '';
     snapshot.forEach(docSnap => {
-       const u = docSnap.data(); const uid = docSnap.id; const tr = document.createElement('tr');
-       let statusHtml = '', actionHtml = '';
-       if(u.role === 'superadmin') { statusHtml = `<span style="color:#C9A84C; font-weight:bold;">مدير عام</span>`; actionHtml = `<span style="color:var(--silver);">لا يمكن التعديل</span>`; } 
-       else if (u.role === 'suspended') { statusHtml = `<span style="color:#ef4444; font-weight:bold;">محظور</span>`; actionHtml = `<button onclick="window.toggleAdminRole('${uid}', 'admin')" style="background:#22c55e; color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer;">تفعيل</button>`; } 
-       else { statusHtml = `<span style="color:#3b82f6; font-weight:bold;">مشرف عادي</span>`; actionHtml = `<button onclick="window.toggleAdminRole('${uid}', 'suspended')" style="background:#ef4444; color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer;">حظر</button>`; }
+       const u = docSnap.data();
+       const uid = docSnap.id;
+       const tr = document.createElement('tr');
+       
+       let statusHtml = '';
+       let actionHtml = '';
+       if(u.role === 'superadmin') {
+          statusHtml = `<span style="color:#C9A84C; font-weight:bold;">مدير عام</span>`;
+          actionHtml = `<span style="color:var(--silver);">لا يمكن التعديل</span>`;
+       } else if (u.role === 'suspended') {
+          statusHtml = `<span style="color:#ef4444; font-weight:bold;">محظور</span>`;
+          actionHtml = `<button onclick="window.toggleAdminRole('${uid}', 'admin')" style="background:#22c55e; color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer;">تفعيل</button>`;
+       } else {
+          statusHtml = `<span style="color:#3b82f6; font-weight:bold;">مشرف عادي</span>`;
+          actionHtml = `<button onclick="window.toggleAdminRole('${uid}', 'suspended')" style="background:#ef4444; color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer;">حظر</button>`;
+       }
+       
        const dateStr = u.created_at ? new Date(u.created_at).toLocaleDateString('ar-EG') : 'غير محدد';
-       tr.innerHTML = `<td style="font-weight:bold; color:var(--dark);">${u.email}</td><td>${statusHtml}</td><td style="direction:ltr; text-align:right;">${dateStr}</td><td>${actionHtml}</td>`;
+       
+       tr.innerHTML = `
+         <td style="font-weight:bold; color:var(--dark);">${u.email}</td>
+         <td>${statusHtml}</td>
+         <td style="direction:ltr; text-align:right;">${dateStr}</td>
+         <td>${actionHtml}</td>
+       `;
        tbody.appendChild(tr);
     });
   });
@@ -121,8 +177,10 @@ function loadAdminsList() {
 
 window.toggleAdminRole = async function(uid, newRole) {
   if(!confirm(`هل أنت متأكد من ${newRole === 'suspended' ? 'حظر' : 'تفعيل'} هذا المشرف؟`)) return;
-  try { await updateDoc(doc(db, 'users', uid), { role: newRole }); logActivity(newRole === 'suspended' ? 'حظر مشرف' : 'تفعيل مشرف', `المعرف: ${uid}`); } 
-  catch(e) { alert("حدث خطأ."); }
+  try {
+    await updateDoc(doc(db, 'users', uid), { role: newRole });
+    logActivity(newRole === 'suspended' ? 'حظر مشرف' : 'تفعيل مشرف', `المعرف: ${uid}`);
+  } catch(e) { alert("حدث خطأ أثناء التعديل."); }
 }
 
 const createAdminBtn = document.getElementById('createNewAdminBtn');
@@ -132,93 +190,166 @@ if(createAdminBtn) {
     const pass = document.getElementById('newAdminPassword').value;
     const msg = document.getElementById('createAdminMsg');
     
-    if(!email || pass.length < 6) { msg.textContent = 'الإيميل مطلوب، وكلمة المرور 6 أحرف على الأقل.'; msg.style.color = '#ef4444'; msg.style.display = 'block'; return; }
-    if(!confirm(`تأكيد إنشاء حساب مشرف جديد للإيميل:\n${email}\nكلمة المرور:\n${pass}`)) return;
+    if(!email || pass.length < 6) {
+      msg.textContent = 'الإيميل مطلوب، وكلمة المرور 6 أحرف على الأقل.';
+      msg.style.color = '#ef4444';
+      msg.style.display = 'block';
+      return;
+    }
     
-    createAdminBtn.disabled = true; createAdminBtn.textContent = 'جاري الإنشاء...';
+    if(!confirm(`تأكيد إنشاء حساب مشرف جديد للإيميل:\\n${email}\\nكلمة المرور:\\n${pass}`)) return;
+    
+    createAdminBtn.disabled = true;
+    createAdminBtn.textContent = 'جاري الإنشاء...';
+    
     try {
+      // Trick: Create a secondary app to create user without logging out SuperAdmin!
       const secondaryApp = initializeApp(firebaseConfig, "SecondaryApp" + Date.now());
       const secAuth = getAuth(secondaryApp);
       const userCred = await createUserWithEmailAndPassword(secAuth, email, pass);
-      await setDoc(doc(db, 'users', userCred.user.uid), { email: email, role: 'admin', created_at: Date.now() });
-      await signOut(secAuth); await deleteApp(secondaryApp);
+      
+      await setDoc(doc(db, 'users', userCred.user.uid), {
+        email: email,
+        role: 'admin',
+        created_at: Date.now()
+      });
+      
+      await signOut(secAuth);
+      await deleteApp(secondaryApp);
+      
       logActivity('إنشاء مشرف جديد', `الإيميل: ${email}`);
       
-      document.getElementById('newAdminEmail').value = ''; document.getElementById('newAdminPassword').value = '';
-      msg.textContent = 'تم إنشاء الحساب بنجاح!'; msg.style.color = '#22c55e'; msg.style.display = 'block';
+      document.getElementById('newAdminEmail').value = '';
+      document.getElementById('newAdminPassword').value = '';
+      msg.textContent = 'تم إنشاء الحساب بنجاح!';
+      msg.style.color = '#22c55e';
+      msg.style.display = 'block';
       setTimeout(() => msg.style.display = 'none', 4000);
+      
     } catch(e) {
-      msg.textContent = 'فشل الإنشاء: قد يكون الإيميل مستخدماً أو غير صالح.'; msg.style.color = '#ef4444'; msg.style.display = 'block';
-    } finally { createAdminBtn.disabled = false; createAdminBtn.textContent = 'إنشاء الحساب'; }
+      msg.textContent = 'فشل الإنشاء: قد يكون الإيميل مستخدماً أو غير صالح.';
+      msg.style.color = '#ef4444';
+      msg.style.display = 'block';
+      console.error(e);
+    } finally {
+      createAdminBtn.disabled = false;
+      createAdminBtn.textContent = 'إنشاء الحساب';
+    }
   });
 }
 
+// Activity Logs Loader
 function loadActivityLogs() {
-  onSnapshot(query(collection(db, 'system', 'activity_logs', 'logs'), orderBy('timestamp', 'desc'), limit(150)), (snapshot) => {
+  const logsQ = query(collection(db, 'system', 'activity_logs', 'logs'), orderBy('timestamp', 'desc'), limit(150));
+  onSnapshot(logsQ, (snapshot) => {
     const tbody = document.getElementById('activityLogsTableBody');
     if(!tbody) return;
     tbody.innerHTML = '';
-    if(snapshot.empty) { tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:30px;">لا توجد نشاطات مسجلة بعد</td></tr>'; return; }
+    if(snapshot.empty) {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:30px;">لا توجد نشاطات مسجلة بعد</td></tr>';
+      return;
+    }
     snapshot.forEach(docSnap => {
-       const d = docSnap.data(); const tr = document.createElement('tr');
-       const dateStr = new Date(d.timestamp).toLocaleString('ar-EG', { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true });
-       tr.innerHTML = `<td style="direction:ltr; text-align:right;">${dateStr}</td><td style="font-weight:bold; color:var(--primary);">${d.email}</td><td><span style="background:rgba(201, 168, 76, 0.2); color:#C9A84C; padding:4px 8px; border-radius:4px; font-size:13px; font-weight:bold;">${d.action}</span></td><td style="color:var(--silver);">${d.details}</td>`;
+       const d = docSnap.data();
+       const tr = document.createElement('tr');
+       const dateStr = new Date(d.timestamp).toLocaleString('ar-EG', {
+          year: 'numeric', month: 'numeric', day: 'numeric',
+          hour: '2-digit', minute: '2-digit', hour12: true
+       });
+       tr.innerHTML = `
+         <td style="direction:ltr; text-align:right;">${dateStr}</td>
+         <td style="font-weight:bold; color:var(--primary);">${d.email}</td>
+         <td><span style="background:rgba(201, 168, 76, 0.2); color:#C9A84C; padding:4px 8px; border-radius:4px; font-size:13px; font-weight:bold;">${d.action}</span></td>
+         <td style="color:var(--silver);">${d.details}</td>
+       `;
        tbody.appendChild(tr);
     });
   });
 }
 
+// Activity Logging Hook Function
 async function logActivity(action, details) {
   if(!auth.currentUser) return;
-  try { await addDoc(collection(db, 'system', 'activity_logs', 'logs'), { email: auth.currentUser.email, action: action, details: details, timestamp: new Date().getTime() }); } 
-  catch(e) {}
+  try {
+    await addDoc(collection(db, 'system', 'activity_logs', 'logs'), {
+      email: auth.currentUser.email,
+      action: action,
+      details: details,
+      timestamp: new Date().getTime()
+    });
+  } catch(e) { console.error("Activity Logging failed", e); }
 }
 
+// Hook into existing global functions to track changes automatically
 setTimeout(() => {
   if(window.saveProduct) {
     const origSaveProduct = window.saveProduct;
     window.saveProduct = function() {
-      try { const pName = document.getElementById('p_name_ar') ? document.getElementById('p_name_ar').value : 'منتج';
-            const isNew = document.getElementById('editProductIdx') && document.getElementById('editProductIdx').value === '';
-            logActivity(isNew ? 'إضافة منتج جديد' : 'تعديل منتج موجود', `المنتج: ${pName}`);
-      } catch(e){} return origSaveProduct.apply(this, arguments);
+      try {
+        const pName = document.getElementById('p_name_ar') ? document.getElementById('p_name_ar').value : 'منتج';
+        const isNew = document.getElementById('editProductIdx') && document.getElementById('editProductIdx').value === '';
+        logActivity(isNew ? 'إضافة منتج جديد' : 'تعديل منتج موجود', `المنتج: ${pName}`);
+      } catch(e){}
+      return origSaveProduct.apply(this, arguments);
     };
   }
+  
   if(window.deleteProduct) {
     const origDel = window.deleteProduct;
     window.deleteProduct = function(idx) {
-      try { const prod = (window.allProducts && window.allProducts[idx]) ? window.allProducts[idx].name.ar : 'منتج مجهول';
-            logActivity('حذف منتج', `تم حذف: ${prod}`);
-      } catch(e){} return origDel.apply(this, arguments);
+      try {
+        const prod = (window.allProducts && window.allProducts[idx]) ? window.allProducts[idx].name.ar : 'منتج مجهول';
+        logActivity('حذف منتج', `تم حذف: ${prod}`);
+      } catch(e){}
+      return origDel.apply(this, arguments);
     };
   }
+  
   if(window.saveSiteSettings) {
     const origSet = window.saveSiteSettings;
     window.saveSiteSettings = function() {
-      logActivity('تعديل الإعدادات', 'تم تغيير إعدادات الموقع الأساسية'); return origSet.apply(this, arguments);
+      logActivity('تعديل الإعدادات', 'تم تغيير إعدادات الموقع الأساسية');
+      return origSet.apply(this, arguments);
     };
   }
 }, 3000);
 
+// Login
 loginBtn.addEventListener('click', async () => {
-  hideError(); const email = emailInput.value.trim(); const password = passwordInput.value;
+  hideError();
+  const email = emailInput.value.trim();
+  const password = passwordInput.value;
   if(!email || !password) return showError('يرجى إدخال الإيميل وكلمة المرور');
-  loginBtn.textContent = 'جاري الدخول...'; loginBtn.disabled = true;
-  try { await signInWithEmailAndPassword(auth, email, password); logActivity('تسجيل دخول', 'عملية دخول ناجحة للوحة التحكم'); } 
-  catch (error) { showError('بيانات الدخول غير صحيحة أو تم حظر الحساب!'); } 
-  finally { loginBtn.textContent = 'دخول'; loginBtn.disabled = false; }
+  
+  loginBtn.textContent = 'جاري الدخول...';
+  loginBtn.disabled = true;
+  
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    logActivity('تسجيل دخول', 'عملية دخول ناجحة للوحة التحكم');
+  } catch (error) {
+    showError('بيانات الدخول غير صحيحة أو تم حظر الحساب!');
+  } finally {
+    loginBtn.textContent = 'دخول';
+    loginBtn.disabled = false;
+  }
 });
 
+// Forgot Password
 forgotBtn.addEventListener('click', async () => {
-  hideError(); const email = emailInput.value.trim();
+  hideError();
+  const email = emailInput.value.trim();
   if(!email) return showError('يرجى كتابة الإيميل أولاً لنرسل لك رابط الاستعادة');
-  try { await sendPasswordResetEmail(auth, email); alert('تم إرسال رابط استعادة كلمة المرور إلى إيميلك!'); } 
-  catch(err) { showError('حدث خطأ! تأكد أن الإيميل صحيح ومسجل لدينا.'); }
+  try {
+    await sendPasswordResetEmail(auth, email);
+    alert('تم إرسال رابط استعادة كلمة المرور إلى إيميلك!');
+  } catch(err) { showError('حدث خطأ! تأكد أن الإيميل صحيح ومسجل لدينا.'); }
 });
 
+// Logout
 logoutBtn.addEventListener('click', () => {
   if(confirm('هل أنت متأكد من تسجيل الخروج؟')) {
     logActivity('تسجيل خروج', 'تم الخروج من النظام');
-    setTimeout(() => signOut(auth), 500);
+    setTimeout(() => signOut(auth), 500); // delay to let log finish
   }
 });
