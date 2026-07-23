@@ -425,32 +425,32 @@ body.light-mode select option { background-color: #ffffff; color: #1a1a2e; }
   <!-- MAIN CONTENT -->
   <main class="admin-main" style="flex: 1; min-width: 0;">
   
-  <!-- KPI OVERVIEW -->
-  <div class="kpi-grid">
-    <div class="kpi-card">
-      <div class="kpi-label"><span>إجمالي الطلبات والبوليصات</span> <span>📦</span></div>
-      <div class="kpi-value" id="kpiOrdersCount">0</div>
-      <div class="kpi-sub">الطلبات المسجلة من العملاء</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-label"><span>طلبات جديدة بانتظار التواصل</span> <span>🔔</span></div>
-      <div class="kpi-value" id="kpiNewOrders" style="color:#FBBF24;">0</div>
-      <div class="kpi-sub">تحتاج لمهندس المعاينة</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-label"><span>المنتجات والصور في الكتالوج</span> <span>🖼️</span></div>
-      <div class="kpi-value" id="kpiProductsCount">0</div>
-      <div class="kpi-sub">تظهر مباشرة للعميل في الموقع</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-label"><span>إجمالي القيمة المقدرة للطلبات</span> <span>💰</span></div>
-      <div class="kpi-value" id="kpiTotalRevenue">0 <span style="font-size:16px;">ج.م</span></div>
-      <div class="kpi-sub">إجمالي عروض الأسعار الصادرة</div>
-    </div>
-  </div>
-
   <!-- TAB 1: ORDERS & WAYBILLS -->
   <div class="tab-panel active" id="tab_orders">
+  
+    <!-- KPI OVERVIEW -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label"><span>إجمالي الطلبات والبوليصات</span> <span>📦</span></div>
+        <div class="kpi-value" id="kpiOrdersCount">0</div>
+        <div class="kpi-sub">الطلبات المسجلة من العملاء</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label"><span>طلبات جديدة بانتظار التواصل</span> <span>🔔</span></div>
+        <div class="kpi-value" id="kpiNewOrders" style="color:#FBBF24;">0</div>
+        <div class="kpi-sub">تحتاج لمهندس المعاينة</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label"><span>المنتجات والصور في الكتالوج</span> <span>🖼️</span></div>
+        <div class="kpi-value" id="kpiProductsCount">0</div>
+        <div class="kpi-sub">تظهر مباشرة للعميل في الموقع</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label"><span>إجمالي القيمة المقدرة للطلبات</span> <span>💰</span></div>
+        <div class="kpi-value" id="kpiTotalRevenue">0 <span style="font-size:16px;">ج.م</span></div>
+        <div class="kpi-sub">إجمالي عروض الأسعار الصادرة</div>
+      </div>
+    </div>
     <div class="admin-panel">
       <div class="panel-header">
         <div class="panel-title">
@@ -867,13 +867,13 @@ body.light-mode select option { background-color: #ffffff; color: #1a1a2e; }
       
       <!-- Create New Admin Form -->
       <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; margin-top: 20px;">
-        <h3 style="color:var(--primary); margin-top:0; margin-bottom:15px;">➕ إضافة مشرف جديد</h3>
-        <div style="display:flex; gap:15px; align-items:center; flex-wrap:wrap;">
-          <input type="email" id="newAdminEmail" placeholder="الإيميل الجديد" style="flex:1; min-width:200px; padding:10px; border-radius:6px; border:1px solid rgba(255,255,255,0.1); background:rgba(0,0,0,0.2); color:white;">
-          <input type="password" id="newAdminPassword" placeholder="كلمة المرور (6 أحرف على الأقل)" style="flex:1; min-width:200px; padding:10px; border-radius:6px; border:1px solid rgba(255,255,255,0.1); background:rgba(0,0,0,0.2); color:white;">
-          <button id="createNewAdminBtn" style="background:var(--primary); color:var(--navy); font-weight:bold; padding:10px 20px; border:none; border-radius:6px; cursor:pointer;">إنشاء الحساب</button>
+        <h3 style="color:var(--gold); margin-top:0; margin-bottom:15px;" data-i18n="➕ إضافة مشرف جديد">➕ إضافة مشرف جديد</h3>
+        <div class="mform-row" style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:0;">
+          <input type="email" id="newAdminEmail" placeholder="الإيميل الجديد" style="flex:1; min-width:250px;">
+          <input type="password" id="newAdminPassword" placeholder="كلمة المرور (6 أحرف على الأقل)" style="flex:1; min-width:250px;">
+          <button id="createNewAdminBtn" class="btn-action" style="padding:12px 25px; background:var(--gold); color:var(--navy); font-weight:bold; border:none; border-radius:6px; cursor:pointer;" data-i18n="إضافة">إضافة</button>
         </div>
-        <div id="createAdminMsg" style="margin-top:10px; font-size:14px; display:none;"></div>
+        <div id="createAdminMsg" style="margin-top: 10px; display: none; font-weight: bold; font-size: 14px;"></div>
       </div>
 
       <div class="table-responsive" style="margin-top: 30px;">
@@ -1064,6 +1064,8 @@ body.light-mode select option { background-color: #ffffff; color: #1a1a2e; }
 // ── SYNCHRONIZED STORAGE KEYS ─────────────────────────────
 const STORAGE_KEY_PRODUCTS = 'alanwar_products_v2';
 const STORAGE_KEY_ORDERS = 'alanwar_orders_v2';
+
+
 
 // Preset images galleries for 1-click addition in admin (7 Categories + up to 6 images)
 const PRESET_GALLERIES = {
@@ -1309,8 +1311,8 @@ function renderOrdersTable() {
       </td>
       <td>
         <div class="order-actions">
-          <button class="btn-action btn-waybill-qr" onclick="openAdminWaybillModal(${idx})">📄 ${tx('بوليصة الشحن (QR)')}</button>
-          <button class="btn-action btn-wa" onclick="openWaChat('${o.customer_phone}', '${o.customer_name}', '${o.order_number}', '${o.product_name}')">💬 ${tx('وتساب')}</button>
+          <button class="btn-action btn-waybill-qr" onclick="openAdminWaybillModal(${idx})">📄 بوليصة الشحن (QR)</button>
+          <button class="btn-action btn-wa" onclick="openWaChat('${o.customer_phone}', '${o.customer_name}', '${o.order_number}', '${o.product_name}')">💬 وتساب</button>
           <button class="btn-action" style="background:rgba(239,68,68,0.15);color:#EF4444;" onclick="deleteOrder(${idx})">🗑️</button>
         </div>
       </td>
@@ -1834,6 +1836,23 @@ function showToast(msg) {
 }
 // ── BILINGUAL SUPPORT (AR / EN) ──────────────────────────────────
 const adminTranslations = {
+  "👁️ سجل النشاطات (Activity Logs)": "👁️ Activity Logs",
+  "مراقبة تحركات المشرفين على لوحة التحكم (خاص بالمدير العام فقط)": "Monitor admin activity on the dashboard (Super Admin only)",
+  "👥 إدارة المشرفين": "👥 Admins Management",
+  "إنشاء وتعديل وحظر حسابات المشرفين (خاص بالمدير العام فقط)": "Create, edit, and suspend admin accounts (Super Admin only)",
+  "➕ إضافة مشرف جديد": "➕ Add New Admin",
+  "الإيميل الجديد": "New Email",
+  "كلمة المرور (6 أحرف على الأقل)": "Password (min 6 chars)",
+  "إضافة": "Add",
+  "التاريخ والوقت": "Date & Time",
+  "المشرف (الإيميل)": "Admin (Email)",
+  "نوع العملية": "Action Type",
+  "التفاصيل": "Details",
+  "الإيميل": "Email",
+  "الصلاحية": "Role",
+  "تاريخ الإنشاء": "Creation Date",
+  "إجراءات": "Actions",
+  "لا توجد نشاطات مسجلة بعد": "No activity logged yet",
   "إدارة الطلبات وبوليصات الشحن (Waybills)": "Orders & Waybills Management",
   "إدارة المنتجات وصور الكتالوج المتعددة": "Products & Catalog Management",
   "حاسبة الأسعار ومواد التشطيب للأدمن": "Admin Pricing Calculator",
